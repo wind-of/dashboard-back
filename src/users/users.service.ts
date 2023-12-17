@@ -15,13 +15,13 @@ export class UsersService {
 		{
 			id: 1,
 			firstname: "john",
-			password: "something1",
+			password: "$2b$10$Scl/sCdS1BOa/6ebWtXQ8ug.DJIwv/rQGOZ4uLhLG1BB0CXGlh4a6",
 			email: "3G4Yn@example.com"
 		},
 		{
 			id: 2,
 			firstname: "Ron",
-			password: "something2",
+			password: "$2b$10$tPNlU74Akdp2hig4gWx.GuOJidgxq83qbANuQ5EJh3KZdx4h6c9Vq",
 			email: "3G4Y41n@example.com"
 		}
 	];
