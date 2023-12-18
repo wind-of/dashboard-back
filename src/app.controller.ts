@@ -1,9 +1,9 @@
-import { Controller, Request, Post, UseGuards, Get } from "@nestjs/common";
+import { Controller, Request, Post, UseGuards, Get, Res } from "@nestjs/common";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { AppService } from "./app.service";
 import { AuthService } from "./auth/auth.service";
-import { JwtAuthGuard } from "./guards/jwt-auth.guard";
-import { Public } from "./decorators/public-route.decorator";
+import { Response } from "express";
+import { AuthenticatedGuard } from "./guards/authentication.guard";
 
 @Controller()
 export class AppController {
@@ -12,20 +12,30 @@ export class AppController {
 		private authService: AuthService
 	) {}
 
-	@Public()
 	@Get()
 	getHello(): string {
 		return this.appService.getHello();
 	}
 
-	@Public()
 	@UseGuards(LocalAuthGuard)
 	@Post("auth/login")
-	async login(@Request() req) {
-		return this.authService.login(req.user);
+	async login(@Request() req, @Res({ passthrough: true }) res: Response) {
+		const { accessToken, email } = await this.authService.login(req.user);
+		res.cookie("accessToken", accessToken, {
+			expires: new Date(new Date().getTime() + 60),
+			sameSite: "strict",
+			httpOnly: true
+		});
+		res.send({ email });
 	}
 
-	@UseGuards(JwtAuthGuard)
+	@Get("/logout")
+	logout(@Request() req): any {
+		req.session.destroy();
+		return { message: "The user session has ended" };
+	}
+
+	@UseGuards(AuthenticatedGuard)
 	@Get("profile")
 	getProfile(@Request() req) {
 		return req.user;
