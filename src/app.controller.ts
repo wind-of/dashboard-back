@@ -3,7 +3,6 @@ import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { AppService } from "./app.service";
 import { AuthService } from "./auth/auth.service";
 import { Response } from "express";
-import { AuthenticatedGuard } from "./guards/authentication.guard";
 
 @Controller()
 export class AppController {
@@ -33,11 +32,5 @@ export class AppController {
 	logout(@Request() req): any {
 		req.session.destroy();
 		return { message: "The user session has ended" };
-	}
-
-	@UseGuards(AuthenticatedGuard)
-	@Get("profile")
-	getProfile(@Request() req) {
-		return req.user;
 	}
 }
