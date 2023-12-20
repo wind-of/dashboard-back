@@ -1,4 +1,11 @@
-import { Controller, Request, UseGuards, Get, Param } from "@nestjs/common";
+import {
+	Controller,
+	Request,
+	UseGuards,
+	Get,
+	Param,
+	Post
+} from "@nestjs/common";
 import { UsersService } from "src/users/users.service";
 import { AuthenticatedGuard } from "src/guards/authentication.guard";
 
@@ -15,6 +22,11 @@ export class UsersController {
 	@Get(":id")
 	async getUser(@Param("id") id: number) {
 		console.log("Get user by id: " + id);
-		return await this.usersService.findOneById(id);
+		return this.usersService.findOneById(id);
+	}
+
+	@Post()
+	async createUser(@Request() req) {
+		return this.usersService.create(req.body);
 	}
 }
