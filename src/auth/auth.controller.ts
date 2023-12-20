@@ -3,6 +3,7 @@ import { UsersService } from "src/users/users.service";
 import { LocalAuthGuard } from "src/guards/local-auth.guard";
 import { AuthService } from "src/auth/auth.service";
 import { Response } from "express";
+import { AuthenticatedGuard } from "src/guards/authentication.guard";
 
 @Controller("auth")
 export class AuthController {
@@ -10,6 +11,10 @@ export class AuthController {
 		private usersService: UsersService,
 		private authService: AuthService
 	) {}
+
+	@UseGuards(AuthenticatedGuard)
+	@Get("is-logged")
+	isUserLogged() {}
 
 	@UseGuards(LocalAuthGuard)
 	@Post("login")
