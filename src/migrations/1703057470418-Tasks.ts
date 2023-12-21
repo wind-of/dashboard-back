@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Tasks1703057670418 implements MigrationInterface {
+export class Tasks1703057470418 implements MigrationInterface {
 	public async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.query(`
 			CREATE TABLE IF NOT EXISTS task (
@@ -11,7 +11,8 @@ export class Tasks1703057670418 implements MigrationInterface {
 				start TIMESTAMP NOT NULL,
 				end TIMESTAMP NOT NULL,
 				attachment VARCHAR(255),
-				columnId INT NOT NULL
+				columnId INT NOT NULL,
+				FOREIGN KEY (columnId) REFERENCES columns (id)
 			)
 		`);
 	}
