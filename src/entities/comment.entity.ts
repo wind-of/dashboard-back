@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { TaskEntity } from "src/entities/task.entity";
-import { UserEntity } from "src/entities/user.entity";
+import { Task as TaskEntity } from "src/entities/task.entity";
+import { User as UserEntity } from "src/entities/user.entity";
 
 @Entity()
-export class CommentEntity {
+export class Comment {
 	@PrimaryGeneratedColumn()
 	id: number;
 

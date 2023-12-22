@@ -5,11 +5,11 @@ import {
 	OneToMany,
 	ManyToOne
 } from "typeorm";
-import { ColumnEntity } from "src/entities/column.entity";
-import { CommentEntity } from "src/entities/comment.entity";
+import { Columns as ColumnEntity } from "src/entities/column.entity";
+import { Comment as CommentEntity } from "src/entities/comment.entity";
 
 @Entity()
-export class TaskEntity {
+export class Task {
 	@PrimaryGeneratedColumn()
 	id: number;
 

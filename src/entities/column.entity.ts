@@ -5,11 +5,11 @@ import {
 	OneToMany,
 	ManyToOne
 } from "typeorm";
-import { TaskEntity } from "src/entities/task.entity";
-import { ProjectEntity } from "src/entities/project.entity";
+import { Task as TaskEntity } from "src/entities/task.entity";
+import { Project as ProjectEntity } from "src/entities/project.entity";
 
 @Entity()
-export class ColumnEntity {
+export class Columns {
 	@PrimaryGeneratedColumn()
 	id: number;
 
