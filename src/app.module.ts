@@ -1,15 +1,17 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
-import { AuthModule } from "./auth/auth.module";
-import { UsersModule } from "./users/users.module";
-import { JwtModule } from "@nestjs/jwt";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { ProjectModule } from "./project/project.module";
-import { TaskModule } from "./task/task.module";
-import { RolesModule } from "./roles/roles.module";
-import typeorm from "./config/typeorm";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { JwtModule } from "@nestjs/jwt";
+import { AppController } from "src/app.controller";
+import { AppService } from "src/app.service";
+import { AuthModule } from "src/auth/auth.module";
+import { UsersModule } from "src/users/users.module";
+import { ProjectModule } from "src/project/project.module";
+import { TaskModule } from "src/task/task.module";
+import { RolesModule } from "src/roles/roles.module";
+import { CommentModule } from "src/comment/comment.module";
+import { ColumnsModule } from "src/columns/columns.module";
+import typeorm from "src/config/typeorm";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -29,7 +31,9 @@ dotenv.config();
 		JwtModule,
 		ProjectModule,
 		TaskModule,
-		RolesModule
+		RolesModule,
+		CommentModule,
+		ColumnsModule
 	],
 	controllers: [AppController],
 	providers: [AppService]
