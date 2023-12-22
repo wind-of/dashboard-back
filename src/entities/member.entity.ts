@@ -7,6 +7,12 @@ export class Member {
 	@PrimaryGeneratedColumn()
 	id: number;
 
+	@Column()
+	userId: number;
+
+	@Column()
+	projectId: number;
+
 	@ManyToOne(() => UserEntity, (user) => user)
 	user: UserEntity;
 
