@@ -6,15 +6,13 @@ import { UsersModule } from "./users/users.module";
 import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ProjectModule } from "./project/project.module";
 import typeorm from "./config/typeorm";
 import * as dotenv from "dotenv";
 
 dotenv.config();
 @Module({
 	imports: [
-		AuthModule,
-		UsersModule,
-		JwtModule,
 		ConfigModule.forRoot({
 			isGlobal: true,
 			load: [typeorm]
@@ -23,7 +21,11 @@ dotenv.config();
 			inject: [ConfigService],
 			useFactory: async (configService: ConfigService) =>
 				configService.get("typeorm")
-		})
+		}),
+		AuthModule,
+		UsersModule,
+		JwtModule,
+		ProjectModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

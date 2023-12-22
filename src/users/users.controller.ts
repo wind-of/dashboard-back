@@ -19,9 +19,14 @@ export class UsersController {
 		return req.user;
 	}
 
+	@UseGuards(AuthenticatedGuard)
+	@Get("projects")
+	async getProjects(@Request() req) {
+		return this.usersService.findUserProjects(req.user.id);
+	}
+
 	@Get(":id")
 	async getUser(@Param("id") id: number) {
-		console.log("Get user by id: " + id);
 		return this.usersService.findOneById(id);
 	}
 
