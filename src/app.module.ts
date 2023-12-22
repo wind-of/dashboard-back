@@ -7,6 +7,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ProjectModule } from "./project/project.module";
+import { TaskModule } from "./task/task.module";
 import typeorm from "./config/typeorm";
 import * as dotenv from "dotenv";
 
@@ -25,7 +26,8 @@ dotenv.config();
 		AuthModule,
 		UsersModule,
 		JwtModule,
-		ProjectModule
+		ProjectModule,
+		TaskModule
 	],
 	controllers: [AppController],
 	providers: [AppService]
