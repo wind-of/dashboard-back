@@ -16,7 +16,9 @@ export class Columns {
 	@Column()
 	title: string;
 
-	@ManyToOne(() => ProjectEntity, (project) => project.columns)
+	@ManyToOne(() => ProjectEntity, (project) => project.columns, {
+		onDelete: "CASCADE"
+	})
 	project: ProjectEntity;
 
 	@OneToMany(() => TaskEntity, (task) => task.column)

@@ -13,10 +13,14 @@ export class Roles {
 	@Column()
 	projectId: number;
 
-	@ManyToOne(() => UserEntity, (user) => user)
+	@ManyToOne(() => UserEntity, (user) => user, {
+		onDelete: "CASCADE"
+	})
 	user: UserEntity;
 
-	@ManyToOne(() => ProjectEntity, (project) => project.members)
+	@ManyToOne(() => ProjectEntity, (project) => project.members, {
+		onDelete: "CASCADE"
+	})
 	project: ProjectEntity;
 
 	@Column()

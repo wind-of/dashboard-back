@@ -18,7 +18,7 @@ export class Project {
 	title: string;
 
 	@Column()
-	@OneToOne(() => UserEntity)
+	@OneToOne(() => UserEntity, (user) => user.id)
 	ownerId: number;
 
 	@OneToMany(() => ColumnEntity, (column) => column.project)
