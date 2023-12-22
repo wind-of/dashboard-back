@@ -5,11 +5,11 @@ import {
 	OneToMany,
 	ManyToOne
 } from "typeorm";
-import { Column as ColumnEntity } from "./column.entity";
-import { Comment } from "./comment.entity";
+import { ColumnEntity } from "src/entities/column.entity";
+import { CommentEntity } from "src/entities/comment.entity";
 
 @Entity()
-export class Task {
+export class TaskEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
@@ -34,6 +34,6 @@ export class Task {
 	@ManyToOne(() => ColumnEntity, (column) => column.tasks)
 	column: ColumnEntity;
 
-	@OneToMany(() => Comment, (comment) => comment.task)
-	comments: Comment[];
+	@OneToMany(() => CommentEntity, (comment) => comment.task)
+	comments: CommentEntity[];
 }

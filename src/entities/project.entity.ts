@@ -5,19 +5,19 @@ import {
 	OneToMany,
 	OneToOne
 } from "typeorm";
-import { Column as ColumnEntity } from "./column.entity";
-import { Member } from "./member.entity";
-import { User } from "./user.entity";
+import { ColumnEntity } from "src/entities/column.entity";
+import { Member } from "src/entities/member.entity";
+import { UserEntity } from "src/entities/user.entity";
 
 @Entity()
-export class Project {
+export class ProjectEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column()
 	title: string;
 
-	@OneToOne(() => User)
+	@OneToOne(() => UserEntity)
 	ownerId: string;
 
 	@OneToMany(() => ColumnEntity, (column) => column.project)

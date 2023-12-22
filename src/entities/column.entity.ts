@@ -1,24 +1,24 @@
 import {
 	Entity,
-	Column as TableColumn,
+	Column,
 	PrimaryGeneratedColumn,
 	OneToMany,
 	ManyToOne
 } from "typeorm";
-import { Task } from "./task.entity";
-import { Project } from "./project.entity";
+import { TaskEntity } from "src/entities/task.entity";
+import { ProjectEntity } from "src/entities/project.entity";
 
 @Entity()
-export class Column {
+export class ColumnEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@TableColumn()
+	@Column()
 	title: string;
 
-	@ManyToOne(() => Project, (project) => project.columns)
-	project: Project;
+	@ManyToOne(() => ProjectEntity, (project) => project.columns)
+	project: ProjectEntity;
 
-	@OneToMany(() => Task, (task) => task.column)
-	tasks: Task[];
+	@OneToMany(() => TaskEntity, (task) => task.column)
+	tasks: TaskEntity[];
 }

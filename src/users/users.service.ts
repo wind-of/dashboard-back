@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "src/entities/user.entity";
+import { UserEntity } from "src/entities/user.entity";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { BCRYPT_ROUNDS } from "src/constants";
@@ -8,11 +8,11 @@ import { BCRYPT_ROUNDS } from "src/constants";
 @Injectable()
 export class UsersService {
 	constructor(
-		@InjectRepository(User)
-		private usersRepository: Repository<User>
+		@InjectRepository(UserEntity)
+		private usersRepository: Repository<UserEntity>
 	) {}
 
-	async create(user: User) {
+	async create(user: UserEntity) {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...createdUser } = await this.usersRepository.save({
 			...user,
@@ -25,15 +25,15 @@ export class UsersService {
 		await this.usersRepository.delete(id);
 	}
 
-	findAll(): Promise<User[]> {
+	findAll(): Promise<UserEntity[]> {
 		return this.usersRepository.find();
 	}
 
-	findOneById(id: number): Promise<User | null> {
+	findOneById(id: number): Promise<UserEntity | null> {
 		return this.usersRepository.findOneBy({ id });
 	}
 
-	findOneByEmail(email: string): Promise<User | null> {
+	findOneByEmail(email: string): Promise<UserEntity | null> {
 		return this.usersRepository.findOneBy({ email });
 	}
 

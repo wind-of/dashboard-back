@@ -1,20 +1,20 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { Task } from "./task.entity";
-import { User } from "./user.entity";
+import { TaskEntity } from "src/entities/task.entity";
+import { UserEntity } from "src/entities/user.entity";
 
 @Entity()
-export class Comment {
+export class CommentEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column()
 	content: string;
 
-	@ManyToOne(() => User, (user) => user.comments)
-	user: User;
+	@ManyToOne(() => UserEntity, (user) => user.comments)
+	user: UserEntity;
 
-	@ManyToOne(() => Task, (task) => task.comments)
-	task: Task;
+	@ManyToOne(() => TaskEntity, (task) => task.comments)
+	task: TaskEntity;
 
 	@Column()
 	attachment: string;
