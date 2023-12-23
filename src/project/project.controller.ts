@@ -14,10 +14,15 @@ import { CreateProjectDto } from "src/project/dto/create-project.dto";
 import { AuthenticatedGuard } from "src/guards/authentication.guard";
 import { UpdateProjectDto } from "./dto/update-project.dto";
 import { ProjectOwnerGuard } from "./guards/project-owner.guard";
+import { RolesService } from "src/roles/roles.service";
+import { ProjectRoles } from "src/enums/project.roles.enum";
 
 @Controller("project")
 export class ProjectController {
-	constructor(private readonly projectService: ProjectService) {}
+	constructor(
+		private readonly projectService: ProjectService,
+		private readonly rolesService: RolesService
+	) {}
 
 	@UseGuards(AuthenticatedGuard)
 	@Get()
@@ -37,10 +42,16 @@ export class ProjectController {
 		@Request() req,
 		@Body() createProjectDto: CreateProjectDto
 	) {
-		return this.projectService.create({
+		const project = await this.projectService.create({
 			...createProjectDto,
 			ownerId: req.user.id
 		});
+		await this.rolesService.create({
+			projectId: project.id,
+			userId: req.user.id,
+			role: ProjectRoles.Owner
+		});
+		return project;
 	}
 
 	@UseGuards(AuthenticatedGuard, ProjectOwnerGuard)
