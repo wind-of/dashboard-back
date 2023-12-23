@@ -16,6 +16,8 @@ import { UpdateProjectDto } from "./dto/update-project.dto";
 import { ProjectOwnerGuard } from "./guards/project-owner.guard";
 import { RolesService } from "src/roles/roles.service";
 import { ProjectRoles } from "src/enums/project.roles.enum";
+import { AddMemberDto } from "./dto/add-member.dto";
+import { UpdateMemberDto } from "./dto/update-member.dto";
 
 @Controller("project")
 export class ProjectController {
@@ -67,5 +69,47 @@ export class ProjectController {
 	@Delete(":projectId")
 	async remove(@Param("projectId") id: number) {
 		await this.projectService.remove(id);
+	}
+
+	// TODO: admin тоже может добавлять пользователей
+	@UseGuards(AuthenticatedGuard, ProjectOwnerGuard)
+	@Post(":projectId/member")
+	async addMember(
+		@Param("projectId") projectId: number,
+		@Body() addMemberDto: AddMemberDto
+	) {
+		await this.rolesService.create({
+			projectId,
+			userId: addMemberDto.userId,
+			role: ProjectRoles.Member
+		});
+		return this.projectService.findOneById(projectId);
+	}
+
+	// TODO: admin тоже может обновлять пользователей
+	@UseGuards(AuthenticatedGuard, ProjectOwnerGuard)
+	@Post(":projectId/member/:memberId")
+	async updateMember(
+		@Param("projectId") projectId: number,
+		@Param("memberId") memberId: number,
+		@Body() updateMemberDto: UpdateMemberDto
+	) {
+		await this.rolesService.updateById(memberId, updateMemberDto);
+		return this.projectService.findOneById(projectId);
+	}
+
+	// TODO: admin тоже может удалять пользователей
+	@UseGuards(AuthenticatedGuard, ProjectOwnerGuard)
+	@Delete(":projectId/member/:memberId")
+	async deleteMember(
+		@Param("projectId") projectId: number,
+		@Param("memberId") memberId: number
+	) {
+		const isOwner = await this.projectService.isAdmin(memberId, projectId);
+		if (isOwner) {
+			return false;
+		}
+		await this.rolesService.remove(memberId);
+		return this.projectService.findOneById(projectId);
 	}
 }

@@ -4,12 +4,15 @@ import { Repository } from "typeorm";
 import { Project as ProjectEntity } from "src/entities/project.entity";
 import { ProjectProto } from "src/project/types/create.project";
 import { UpdateProjectDto } from "./dto/update-project.dto";
+import { RolesService } from "src/roles/roles.service";
+import { ProjectRoles } from "src/enums/project.roles.enum";
 
 @Injectable()
 export class ProjectService {
 	constructor(
 		@InjectRepository(ProjectEntity)
-		private projectsRepository: Repository<ProjectEntity>
+		private projectsRepository: Repository<ProjectEntity>,
+		private rolesService: RolesService
 	) {}
 
 	async create(project: ProjectProto) {
@@ -35,5 +38,14 @@ export class ProjectService {
 
 	findOneByOwnerId(ownerId: number): Promise<ProjectEntity | null> {
 		return this.projectsRepository.findOneBy({ ownerId });
+	}
+
+	async isAdmin(userId: number, projectId: number) {
+		const project = await this.findOneById(projectId);
+		if (!project) {
+			return false;
+		}
+		const member = await this.rolesService.findBy({ userId, projectId });
+		return member?.role === ProjectRoles.Owner;
 	}
 }
