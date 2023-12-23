@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { Roles as RolesEntity } from "src/entities/roles.entity";
 import { UpdateRolesDto } from "src/roles/dto/update-roles.dto";
 import { CreateRolesDto } from "src/roles/dto/create-roles.dto";
-import { RolesCriteria } from "./types/criteria";
+import { RolesSearchCriteria } from "./types/search-criteria";
 
 @Injectable()
 export class RolesService {
@@ -26,7 +26,7 @@ export class RolesService {
 		await this.rolesRepository.delete(id);
 	}
 
-	findBy(criteria: RolesCriteria): Promise<RolesEntity | null> {
+	findBy(criteria: RolesSearchCriteria): Promise<RolesEntity | null> {
 		return this.rolesRepository.findOneBy(criteria);
 	}
 }
