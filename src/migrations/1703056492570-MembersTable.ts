@@ -1,4 +1,4 @@
-import { projectMemberRoles } from "src/constants";
+import { ProjectRoles } from "src/enums/project.roles.enum";
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class MembersTable1703056492570 implements MigrationInterface {
@@ -8,7 +8,7 @@ export class MembersTable1703056492570 implements MigrationInterface {
 				id INT PRIMARY KEY AUTO_INCREMENT,
 				userId INT NOT NULL,
 				projectId INT NOT NULL,
-				role VARCHAR(255) NOT NULL DEFAULT("${projectMemberRoles.Member}"),
+				role VARCHAR(255) NOT NULL DEFAULT("${ProjectRoles.Member}"),
 				FOREIGN KEY (userId) REFERENCES user (id),
 				FOREIGN KEY (projectId) REFERENCES project (id)
 			)
