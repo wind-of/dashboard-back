@@ -2,17 +2,17 @@ import {
 	Body,
 	Controller,
 	Delete,
-	ForbiddenException,
 	Param,
 	Post,
 	Request,
 	UseGuards,
-	BadRequestException
+	Patch
 } from "@nestjs/common";
 import { ProjectService } from "src/project/project.service";
 import { CreateProjectDto } from "src/project/dto/create-project.dto";
 import { AuthenticatedGuard } from "src/guards/authentication.guard";
 import { UpdateProjectDto } from "./dto/update-project.dto";
+import { ProjectUpdateGuard } from "src/guards/project-update.guard";
 
 @Controller("project")
 export class ProjectController {
@@ -30,38 +30,18 @@ export class ProjectController {
 		});
 	}
 
-	@UseGuards(AuthenticatedGuard)
-	@Post(":id")
+	@UseGuards(AuthenticatedGuard, ProjectUpdateGuard)
+	@Patch(":projectId")
 	async updateProject(
-		@Request() req,
-		@Param("id") id: number,
+		@Param("projectId") id: number,
 		@Body() updateProjectDto: UpdateProjectDto
 	) {
-		// TODO: что-то можно было сделать с повторяющимися проверками, осталось вспомнить [Guard?].
-		const project = await this.projectService.findOneById(id);
-		if (!project) {
-			throw new BadRequestException("There is no project with the passed id");
-		}
-		if (req.user.id !== project.ownerId) {
-			throw new ForbiddenException(
-				"You are not allowed to perform the action on this project"
-			);
-		}
 		return this.projectService.update(id, updateProjectDto);
 	}
 
-	@UseGuards(AuthenticatedGuard)
-	@Delete(":id")
-	async remove(@Request() req, @Param("id") id: number) {
-		const project = await this.projectService.findOneById(id);
-		if (!project) {
-			throw new BadRequestException("There is no project with the passed id");
-		}
-		if (req.user.id !== project.ownerId) {
-			throw new ForbiddenException(
-				"You are not allowed to perform the action on this project"
-			);
-		}
-		await this.projectService.remove(req.user.id);
+	@UseGuards(AuthenticatedGuard, ProjectUpdateGuard)
+	@Delete(":projectId")
+	async remove(@Param("projectId") id: number) {
+		await this.projectService.remove(id);
 	}
 }
