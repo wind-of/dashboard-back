@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Project as ProjectEntity } from "src/entities/project.entity";
+import { ProjectProto } from "src/project/types/create.project";
+import { UpdateProjectDto } from "./dto/update-project.dto";
 
 @Injectable()
 export class ProjectService {
@@ -10,8 +12,13 @@ export class ProjectService {
 		private projectsRepository: Repository<ProjectEntity>
 	) {}
 
-	async create(project: ProjectEntity) {
+	async create(project: ProjectProto) {
 		return this.projectsRepository.save(project);
+	}
+
+	async update(id: number, project: UpdateProjectDto) {
+		await this.projectsRepository.update(id, project);
+		return this.findOneById(id);
 	}
 
 	async remove(id: number): Promise<void> {
