@@ -23,7 +23,11 @@ import { ProjectExistenceGuard } from "src/project/guards/project-existence.guar
 import { AddColumnDto } from "src/project/dto/add-column.dto";
 import { ColumnsService } from "src/columns/columns.service";
 import { UpdateColumnDto } from "src/columns/dto/update-column.dto";
+import { TaskService } from "src/task/task.service";
+import { AddTaskDto } from "./dto/add-task.dto";
+import { UpdateTaskDto } from "src/task/dto/update-task.dto";
 import { ColumnExistenceGuard } from "./guards/column-existence.guard";
+import { TaskExistenceGuard } from "./guards/task-existence.guard";
 
 @Controller("projects")
 @UseGuards(AuthenticatedGuard, ProjectRolesGuard)
@@ -31,6 +35,7 @@ export class ProjectController {
 	constructor(
 		private readonly projectService: ProjectService,
 		private readonly columnsService: ColumnsService,
+		private readonly taskService: TaskService,
 		private readonly rolesService: RolesService
 	) {}
 
@@ -155,5 +160,41 @@ export class ProjectController {
 	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
 	async deleteColumn(@Param("columnId") columnId: number) {
 		return this.columnsService.remove(columnId);
+	}
+
+	@Get(":projectId/columns/:columnId/task")
+	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
+	async getTasks(@Param("columnId") columnId: number) {
+		return this.taskService.findAllBy({ columnId });
+	}
+
+	@Post(":projectId/columns/:columnId/task")
+	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard, TaskExistenceGuard)
+	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	async createTask(
+		@Param("columnId") columnId: number,
+		@Body() task: AddTaskDto
+	) {
+		return this.taskService.create({
+			columnId,
+			...task
+		});
+	}
+
+	@Patch(":projectId/columns/:columnId/task/:taskId")
+	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard, TaskExistenceGuard)
+	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	async updateTask(
+		@Param("taskId") taskId: number,
+		@Body() task: UpdateTaskDto
+	) {
+		return this.taskService.update(taskId, task);
+	}
+
+	@Delete(":projectId/columns/:columnId/task/:taskId")
+	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard, TaskExistenceGuard)
+	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	async deleteTask(@Param("taskId") taskId: number) {
+		return this.taskService.remove(taskId);
 	}
 }

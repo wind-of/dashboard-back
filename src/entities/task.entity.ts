@@ -31,6 +31,9 @@ export class Task {
 	@Column()
 	attachment: string;
 
+	@Column()
+	columnId: number;
+
 	@ManyToOne(() => ColumnEntity, (column) => column.tasks, {
 		onDelete: "CASCADE"
 	})
