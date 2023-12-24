@@ -1,4 +1,4 @@
-export enum ProjectRoles {
+export enum MemberRoles {
 	Owner = "owner",
 	Admin = "admin",
 	Member = "member"

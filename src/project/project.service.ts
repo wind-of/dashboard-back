@@ -5,7 +5,7 @@ import { Project as ProjectEntity } from "src/entities/project.entity";
 import { ProjectProto } from "src/project/types/create.project";
 import { UpdateProjectDto } from "./dto/update-project.dto";
 import { RolesService } from "src/roles/roles.service";
-import { ProjectRoles } from "src/enums/project.roles.enum";
+import { MemberRoles } from "src/roles/enums/roles.enum";
 
 @Injectable()
 export class ProjectService {
@@ -46,6 +46,6 @@ export class ProjectService {
 			return false;
 		}
 		const member = await this.rolesService.findBy({ userId, projectId });
-		return member?.role === ProjectRoles.Owner;
+		return member?.role === MemberRoles.Owner;
 	}
 }
