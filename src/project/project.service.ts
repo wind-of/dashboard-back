@@ -48,4 +48,13 @@ export class ProjectService {
 		const member = await this.rolesService.findBy({ userId, projectId });
 		return member?.role === MemberRoles.Owner;
 	}
+
+	async isParticipant(userId: number, projectId: number) {
+		const project = await this.findOneById(projectId);
+		if (!project) {
+			return false;
+		}
+		const member = await this.rolesService.findBy({ userId, projectId });
+		return !!member;
+	}
 }

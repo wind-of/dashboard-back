@@ -5,6 +5,7 @@ import { Columns as ColumnsEntity } from "src/entities/column.entity";
 
 @Module({
 	imports: [TypeOrmModule.forFeature([ColumnsEntity])],
-	providers: [ColumnsService]
+	providers: [ColumnsService],
+	exports: [ColumnsService]
 })
 export class ColumnsModule {}

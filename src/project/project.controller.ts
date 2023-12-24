@@ -20,28 +20,31 @@ import { UpdateMemberDto } from "src/project/dto/update-member.dto";
 import { ProjectMemberRoles as Roles } from "src/project/decorators/project.roles.decorator";
 import { ProjectRolesGuard } from "src/project/guards/project-roles.guard";
 import { ProjectExistenceGuard } from "src/project/guards/project-existence.guard";
+import { AddColumnDto } from "src/project/dto/add-column.dto";
+import { ColumnsService } from "src/columns/columns.service";
+import { UpdateColumnDto } from "src/columns/dto/update-column.dto";
+import { ColumnExistenceGuard } from "./guards/column-existence.guard";
 
 @Controller("projects")
-@UseGuards(ProjectRolesGuard)
+@UseGuards(AuthenticatedGuard, ProjectRolesGuard)
 export class ProjectController {
 	constructor(
 		private readonly projectService: ProjectService,
+		private readonly columnsService: ColumnsService,
 		private readonly rolesService: RolesService
 	) {}
 
-	@UseGuards(AuthenticatedGuard)
 	@Get()
 	async getAllProjects(@Request() req) {
 		return this.projectService.findAllByOwnerId(req.user.id);
 	}
 
-	@UseGuards(AuthenticatedGuard, ProjectExistenceGuard)
+	@UseGuards(ProjectExistenceGuard)
 	@Get(":projectId")
 	async getProject(@Param("projectId") id: number) {
 		return this.projectService.findOneById(id);
 	}
 
-	@UseGuards(AuthenticatedGuard)
 	@Post()
 	async createProject(
 		@Request() req,
@@ -59,7 +62,7 @@ export class ProjectController {
 		return project;
 	}
 
-	@UseGuards(AuthenticatedGuard, ProjectExistenceGuard)
+	@UseGuards(ProjectExistenceGuard)
 	@Patch(":projectId")
 	@Roles(MemberRoles.Owner, MemberRoles.Admin)
 	async updateProject(
@@ -69,14 +72,14 @@ export class ProjectController {
 		return this.projectService.update(id, updateProjectDto);
 	}
 
-	@UseGuards(AuthenticatedGuard, ProjectExistenceGuard)
+	@UseGuards(ProjectExistenceGuard)
 	@Delete(":projectId")
 	@Roles(MemberRoles.Owner)
 	async remove(@Param("projectId") id: number) {
 		await this.projectService.remove(id);
 	}
 
-	@UseGuards(AuthenticatedGuard, ProjectExistenceGuard)
+	@UseGuards(ProjectExistenceGuard)
 	@Post(":projectId/member")
 	@Roles(MemberRoles.Owner, MemberRoles.Admin)
 	async addMember(
@@ -91,7 +94,7 @@ export class ProjectController {
 		return this.projectService.findOneById(projectId);
 	}
 
-	@UseGuards(AuthenticatedGuard, ProjectExistenceGuard)
+	@UseGuards(ProjectExistenceGuard)
 	@Post(":projectId/member/:memberId")
 	@Roles(MemberRoles.Owner, MemberRoles.Admin)
 	async updateMember(
@@ -103,8 +106,7 @@ export class ProjectController {
 		return this.projectService.findOneById(projectId);
 	}
 
-	// TODO: admin тоже может удалять пользователей
-	@UseGuards(AuthenticatedGuard, ProjectExistenceGuard)
+	@UseGuards(ProjectExistenceGuard)
 	@Delete(":projectId/member/:memberId")
 	@Roles(MemberRoles.Owner, MemberRoles.Admin)
 	async deleteMember(
@@ -117,5 +119,41 @@ export class ProjectController {
 		}
 		await this.rolesService.remove(memberId);
 		return this.projectService.findOneById(projectId);
+	}
+
+	@Get(":projectId/columns")
+	@UseGuards(ProjectExistenceGuard)
+	async getColumns(@Param("projectId") projectId: number) {
+		return this.columnsService.findAllBy({ projectId });
+	}
+
+	@Post(":projectId/columns")
+	@UseGuards(ProjectExistenceGuard)
+	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	async createColumn(
+		@Param("projectId") projectId: number,
+		@Body() column: AddColumnDto
+	) {
+		return this.columnsService.create({
+			projectId,
+			title: column.title
+		});
+	}
+
+	@Patch(":projectId/columns/:columnId")
+	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
+	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	async updateColumn(
+		@Param("columnId") columnId: number,
+		@Body() column: UpdateColumnDto
+	) {
+		return this.columnsService.update(columnId, column);
+	}
+
+	@Delete(":projectId/columns/:columnId")
+	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
+	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	async deleteColumn(@Param("columnId") columnId: number) {
+		return this.columnsService.remove(columnId);
 	}
 }
