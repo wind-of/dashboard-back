@@ -169,7 +169,7 @@ export class ProjectController {
 	}
 
 	@Post(":projectId/columns/:columnId/task")
-	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard, TaskExistenceGuard)
+	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
 	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
 	async createTask(
 		@Param("columnId") columnId: number,

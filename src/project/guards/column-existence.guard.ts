@@ -11,7 +11,9 @@ export class ColumnExistenceGuard implements CanActivate {
 	constructor(@Inject(ColumnsService) private columnService: ColumnsService) {}
 	async canActivate(context: ExecutionContext) {
 		const request = context.switchToHttp().getRequest();
-		const column = await this.columnService.findBy(request.params.columnId);
+		const column = await this.columnService.findBy({
+			id: request.params.columnId
+		});
 		return !!column;
 	}
 }
