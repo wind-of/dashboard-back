@@ -29,6 +29,9 @@ export class ProjectRolesGuard implements CanActivate {
 			userId: request.user.id,
 			projectId: project.id
 		});
+		if (!member) {
+			return false;
+		}
 		return requiredRoles.includes(member.role as MemberRoles);
 	}
 }
