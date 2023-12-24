@@ -7,12 +7,7 @@ import { User as UserEntity } from "src/entities/user.entity";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";
 import { UserSearchCriteria } from "src/users/types/search-criteria";
-
-function userWithourPassword(user: UserEntity) {
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const { password, ...userWithoutPassword } = user;
-	return userWithoutPassword;
-}
+import { userWithourPassword } from "src/users/helpers";
 
 @Injectable()
 export class UsersService {
