@@ -2,11 +2,11 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Comment as CommentsEntity } from "src/entities/comment.entity";
-import { UpdatedComment } from "src/comment/types/updated-comment";
-import { CommentSerachCriteria } from "src/comment/types/comment-criteria";
+import { UpdatedComment } from "src/comments/types/updated-comment";
+import { CommentSerachCriteria } from "src/comments/types/comment-criteria";
 
 @Injectable()
-export class CommentService {
+export class CommentsService {
 	constructor(
 		@InjectRepository(CommentsEntity)
 		private commentsRepository: Repository<CommentsEntity>

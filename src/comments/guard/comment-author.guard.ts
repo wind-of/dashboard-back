@@ -1,9 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { CommentService } from "../comment.service";
+import { CommentsService } from "../comments.service";
 
 @Injectable()
 export class CommentAuthorGuard implements CanActivate {
-	constructor(private commentsService: CommentService) {}
+	constructor(private commentsService: CommentsService) {}
 	async canActivate(context: ExecutionContext) {
 		const request = context.switchToHttp().getRequest();
 		const membership = await this.commentsService.isAuthor(
