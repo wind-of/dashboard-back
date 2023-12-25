@@ -6,6 +6,7 @@ import { ProjectProto } from "src/project/types/create.project";
 import { UpdateProjectDto } from "./dto/update-project.dto";
 import { RolesService } from "src/roles/roles.service";
 import { MemberRoles } from "src/roles/enums/roles.enum";
+import { ProjectSearchCriteria } from "src/project/types/search-criteria";
 
 @Injectable()
 export class ProjectService {
@@ -21,27 +22,23 @@ export class ProjectService {
 
 	async update(id: number, project: UpdateProjectDto) {
 		await this.projectsRepository.update(id, project);
-		return this.findOneById(id);
+		return this.findBy({ id });
 	}
 
 	async remove(id: number): Promise<void> {
 		await this.projectsRepository.delete(id);
 	}
 
-	findOneById(id: number): Promise<ProjectEntity | null> {
-		return this.projectsRepository.findOneBy({ id });
+	async findBy(criteria: ProjectSearchCriteria) {
+		return this.projectsRepository.findOneBy(criteria);
 	}
 
-	findAllByOwnerId(ownerId: number): Promise<ProjectEntity[]> {
-		return this.projectsRepository.find({ where: { ownerId } });
+	async findAllBy(criteria: ProjectSearchCriteria) {
+		return this.projectsRepository.findBy(criteria);
 	}
 
-	findOneByOwnerId(ownerId: number): Promise<ProjectEntity | null> {
-		return this.projectsRepository.findOneBy({ ownerId });
-	}
-
-	async isAdmin(userId: number, projectId: number) {
-		const project = await this.findOneById(projectId);
+	async isOwner(userId: number, projectId: number) {
+		const project = await this.findBy({ id: projectId });
 		if (!project) {
 			return false;
 		}
@@ -50,7 +47,7 @@ export class ProjectService {
 	}
 
 	async isParticipant(userId: number, projectId: number) {
-		const project = await this.findOneById(projectId);
+		const project = await this.findBy({ id: projectId });
 		if (!project) {
 			return false;
 		}

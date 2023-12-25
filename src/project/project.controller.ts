@@ -19,7 +19,7 @@ import { AddMemberDto } from "src/project/dto/add-member.dto";
 import { UpdateMemberDto } from "src/project/dto/update-member.dto";
 import { ProjectMemberRoles as Roles } from "src/project/decorators/project.roles.decorator";
 import { ProjectRolesGuard } from "src/project/guards/project-roles.guard";
-import { ProjectExistenceGuard } from "src/project/guards/project-existence.guard";
+import { ProjectExistenceGuard } from "src/guards/project-existence.guard";
 import { AddColumnDto } from "src/project/dto/add-column.dto";
 import { ColumnsService } from "src/columns/columns.service";
 import { UpdateColumnDto } from "src/columns/dto/update-column.dto";
@@ -41,13 +41,13 @@ export class ProjectController {
 
 	@Get()
 	async getAllProjects(@Request() req) {
-		return this.projectService.findAllByOwnerId(req.user.id);
+		return this.projectService.findAllBy({ ownerId: req.user.id });
 	}
 
 	@UseGuards(ProjectExistenceGuard)
 	@Get(":projectId")
 	async getProject(@Param("projectId") id: number) {
-		return this.projectService.findOneById(id);
+		return this.projectService.findBy({ id });
 	}
 
 	@Post()
@@ -96,7 +96,7 @@ export class ProjectController {
 			userId: addMemberDto.userId,
 			role: MemberRoles.Member
 		});
-		return this.projectService.findOneById(projectId);
+		return this.projectService.findBy({ id: projectId });
 	}
 
 	@UseGuards(ProjectExistenceGuard)
@@ -108,7 +108,7 @@ export class ProjectController {
 		@Body() updateMemberDto: UpdateMemberDto
 	) {
 		await this.rolesService.updateById(memberId, updateMemberDto);
-		return this.projectService.findOneById(projectId);
+		return this.projectService.findBy({ id: projectId });
 	}
 
 	@UseGuards(ProjectExistenceGuard)
@@ -118,16 +118,17 @@ export class ProjectController {
 		@Param("projectId") projectId: number,
 		@Param("memberId") memberId: number
 	) {
-		const isOwner = await this.projectService.isAdmin(memberId, projectId);
+		const isOwner = await this.projectService.isOwner(memberId, projectId);
 		if (isOwner) {
 			return false;
 		}
 		await this.rolesService.remove(memberId);
-		return this.projectService.findOneById(projectId);
+		return this.projectService.findBy({ id: projectId });
 	}
 
 	@Get(":projectId/columns")
 	@UseGuards(ProjectExistenceGuard)
+	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
 	async getColumns(@Param("projectId") projectId: number) {
 		return this.columnsService.findAllBy({ projectId });
 	}

@@ -22,9 +22,9 @@ export class ProjectRolesGuard implements CanActivate {
 			return true;
 		}
 		const request = context.switchToHttp().getRequest();
-		const project = await this.projectService.findOneById(
-			request.params.projectId
-		);
+		const project = await this.projectService.findBy({
+			id: request.params.projectId
+		});
 		const member = await this.rolesService.findBy({
 			userId: request.user.id,
 			projectId: project.id
