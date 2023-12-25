@@ -13,12 +13,8 @@ import { ProjectService } from "src/project/project.service";
 import { CreateProjectDto } from "src/project/dto/create-project.dto";
 import { AuthenticatedGuard } from "src/guards/authentication.guard";
 import { UpdateProjectDto } from "src/project/dto/update-project.dto";
-import { RolesService } from "src/roles/roles.service";
-import { MemberRoles } from "src/roles/enums/roles.enum";
-import { AddMemberDto } from "src/project/dto/add-member.dto";
-import { UpdateMemberDto } from "src/project/dto/update-member.dto";
-import { ProjectMemberRoles as Roles } from "src/project/decorators/project.roles.decorator";
-import { ProjectRolesGuard } from "src/project/guards/project-roles.guard";
+import { ProjectParticipantRoles as Roles } from "src/decorators/project-roles.decorator";
+import { ProjectRolesGuard } from "src/guards/project-roles.guard";
 import { ProjectExistenceGuard } from "src/guards/project-existence.guard";
 import { AddColumnDto } from "src/project/dto/add-column.dto";
 import { ColumnsService } from "src/columns/columns.service";
@@ -28,6 +24,8 @@ import { AddTaskDto } from "./dto/add-task.dto";
 import { UpdateTaskDto } from "src/task/dto/update-task.dto";
 import { ColumnExistenceGuard } from "./guards/column-existence.guard";
 import { TaskExistenceGuard } from "./guards/task-existence.guard";
+import { ParticipantsService } from "src/participants/participants.service";
+import { ParticipantRolesEnum as RolesEnum } from "src/participants/enums/roles.enum";
 
 @Controller("projects")
 @UseGuards(AuthenticatedGuard, ProjectRolesGuard)
@@ -36,7 +34,7 @@ export class ProjectController {
 		private readonly projectService: ProjectService,
 		private readonly columnsService: ColumnsService,
 		private readonly taskService: TaskService,
-		private readonly rolesService: RolesService
+		private readonly participantsService: ParticipantsService
 	) {}
 
 	@Get()
@@ -59,17 +57,17 @@ export class ProjectController {
 			...createProjectDto,
 			ownerId: req.user.id
 		});
-		await this.rolesService.create({
+		await this.participantsService.create({
 			projectId: project.id,
 			userId: req.user.id,
-			role: MemberRoles.Owner
+			role: RolesEnum.Owner
 		});
 		return project;
 	}
 
 	@UseGuards(ProjectExistenceGuard)
 	@Patch(":projectId")
-	@Roles(MemberRoles.Owner, MemberRoles.Admin)
+	@Roles(RolesEnum.Owner, RolesEnum.Admin)
 	async updateProject(
 		@Param("projectId") id: number,
 		@Body() updateProjectDto: UpdateProjectDto
@@ -79,63 +77,21 @@ export class ProjectController {
 
 	@UseGuards(ProjectExistenceGuard)
 	@Delete(":projectId")
-	@Roles(MemberRoles.Owner)
+	@Roles(RolesEnum.Owner)
 	async remove(@Param("projectId") id: number) {
 		await this.projectService.remove(id);
 	}
 
-	@UseGuards(ProjectExistenceGuard)
-	@Post(":projectId/member")
-	@Roles(MemberRoles.Owner, MemberRoles.Admin)
-	async addMember(
-		@Param("projectId") projectId: number,
-		@Body() addMemberDto: AddMemberDto
-	) {
-		await this.rolesService.create({
-			projectId,
-			userId: addMemberDto.userId,
-			role: MemberRoles.Member
-		});
-		return this.projectService.findBy({ id: projectId });
-	}
-
-	@UseGuards(ProjectExistenceGuard)
-	@Post(":projectId/member/:memberId")
-	@Roles(MemberRoles.Owner, MemberRoles.Admin)
-	async updateMember(
-		@Param("projectId") projectId: number,
-		@Param("memberId") memberId: number,
-		@Body() updateMemberDto: UpdateMemberDto
-	) {
-		await this.rolesService.updateById(memberId, updateMemberDto);
-		return this.projectService.findBy({ id: projectId });
-	}
-
-	@UseGuards(ProjectExistenceGuard)
-	@Delete(":projectId/member/:memberId")
-	@Roles(MemberRoles.Owner, MemberRoles.Admin)
-	async deleteMember(
-		@Param("projectId") projectId: number,
-		@Param("memberId") memberId: number
-	) {
-		const isOwner = await this.projectService.isOwner(memberId, projectId);
-		if (isOwner) {
-			return false;
-		}
-		await this.rolesService.remove(memberId);
-		return this.projectService.findBy({ id: projectId });
-	}
-
 	@Get(":projectId/columns")
 	@UseGuards(ProjectExistenceGuard)
-	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async getColumns(@Param("projectId") projectId: number) {
 		return this.columnsService.findAllBy({ projectId });
 	}
 
 	@Post(":projectId/columns")
 	@UseGuards(ProjectExistenceGuard)
-	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async createColumn(
 		@Param("projectId") projectId: number,
 		@Body() column: AddColumnDto
@@ -148,7 +104,7 @@ export class ProjectController {
 
 	@Patch(":projectId/columns/:columnId")
 	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
-	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async updateColumn(
 		@Param("columnId") columnId: number,
 		@Body() column: UpdateColumnDto
@@ -158,7 +114,7 @@ export class ProjectController {
 
 	@Delete(":projectId/columns/:columnId")
 	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
-	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async deleteColumn(@Param("columnId") columnId: number) {
 		return this.columnsService.remove(columnId);
 	}
@@ -171,7 +127,7 @@ export class ProjectController {
 
 	@Post(":projectId/columns/:columnId/task")
 	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
-	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async createTask(
 		@Param("columnId") columnId: number,
 		@Body() task: AddTaskDto
@@ -184,7 +140,7 @@ export class ProjectController {
 
 	@Patch(":projectId/columns/:columnId/task/:taskId")
 	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard, TaskExistenceGuard)
-	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async updateTask(
 		@Param("taskId") taskId: number,
 		@Body() task: UpdateTaskDto
@@ -194,7 +150,7 @@ export class ProjectController {
 
 	@Delete(":projectId/columns/:columnId/task/:taskId")
 	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard, TaskExistenceGuard)
-	@Roles(MemberRoles.Owner, MemberRoles.Admin, MemberRoles.Member)
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async deleteTask(@Param("taskId") taskId: number) {
 		return this.taskService.remove(taskId);
 	}

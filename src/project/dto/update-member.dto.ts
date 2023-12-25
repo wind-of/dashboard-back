@@ -1,5 +1,5 @@
-import { MemberRoles } from "src/roles/enums/roles.enum";
+import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
 
 export class UpdateMemberDto {
-	readonly role: MemberRoles;
+	readonly role: ParticipantRolesEnum;
 }

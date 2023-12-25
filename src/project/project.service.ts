@@ -4,16 +4,16 @@ import { Repository } from "typeorm";
 import { Project as ProjectEntity } from "src/entities/project.entity";
 import { ProjectProto } from "src/project/types/create.project";
 import { UpdateProjectDto } from "./dto/update-project.dto";
-import { RolesService } from "src/roles/roles.service";
-import { MemberRoles } from "src/roles/enums/roles.enum";
 import { ProjectSearchCriteria } from "src/project/types/project-criteria";
+import { ParticipantsService } from "src/participants/participants.service";
+import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
 
 @Injectable()
 export class ProjectService {
 	constructor(
 		@InjectRepository(ProjectEntity)
 		private projectsRepository: Repository<ProjectEntity>,
-		private rolesService: RolesService
+		private participantService: ParticipantsService
 	) {}
 
 	async create(project: ProjectProto) {
@@ -42,8 +42,8 @@ export class ProjectService {
 		if (!project) {
 			return false;
 		}
-		const member = await this.rolesService.findBy({ userId, projectId });
-		return member?.role === MemberRoles.Owner;
+		const member = await this.participantService.findBy({ userId, projectId });
+		return member?.role === ParticipantRolesEnum.Owner;
 	}
 
 	async isParticipant(userId: number, projectId: number) {
@@ -51,7 +51,7 @@ export class ProjectService {
 		if (!project) {
 			return false;
 		}
-		const member = await this.rolesService.findBy({ userId, projectId });
+		const member = await this.participantService.findBy({ userId, projectId });
 		return !!member;
 	}
 }

@@ -4,13 +4,13 @@ import { CommentsService } from "src/comments/comments.service";
 import { CommentsController } from "src/comments/comments.controller";
 import { Comment as CommentsEntity } from "src/entities/comment.entity";
 import { ProjectModule } from "src/project/project.module";
-import { RolesModule } from "src/roles/roles.module";
+import { ParticipantsModule } from "src/participants/participants.module";
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([CommentsEntity]),
 		ProjectModule,
-		RolesModule
+		ParticipantsModule
 	],
 	providers: [CommentsService],
 	controllers: [CommentsController]

@@ -6,8 +6,8 @@ import {
 	OneToOne
 } from "typeorm";
 import { Columns as ColumnEntity } from "src/entities/column.entity";
-import { Roles as RolesEntity } from "src/entities/roles.entity";
 import { User as UserEntity } from "src/entities/user.entity";
+import { Participants as ParticipantsEntity } from "src/entities/participants.entity";
 
 @Entity()
 export class Project {
@@ -24,6 +24,6 @@ export class Project {
 	@OneToMany(() => ColumnEntity, (column) => column.project)
 	columns: ColumnEntity[];
 
-	@OneToMany(() => RolesEntity, (member) => member.project)
-	members: RolesEntity[];
+	@OneToMany(() => ParticipantsEntity, (member) => member.project)
+	participants: ParticipantsEntity[];
 }
