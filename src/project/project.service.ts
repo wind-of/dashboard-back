@@ -6,7 +6,7 @@ import { ProjectProto } from "src/project/types/create.project";
 import { UpdateProjectDto } from "./dto/update-project.dto";
 import { RolesService } from "src/roles/roles.service";
 import { MemberRoles } from "src/roles/enums/roles.enum";
-import { ProjectSearchCriteria } from "src/project/types/search-criteria";
+import { ProjectSearchCriteria } from "src/project/types/project-criteria";
 
 @Injectable()
 export class ProjectService {

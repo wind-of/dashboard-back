@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { Roles as RolesEntity } from "src/entities/roles.entity";
 import { UpdateRolesDto } from "src/roles/dto/update-roles.dto";
 import { CreateRolesDto } from "src/roles/dto/create-roles.dto";
-import { RolesSearchCriteria } from "./types/search-criteria";
+import { RolesSearchCriteria } from "./types/roles-criteria";
 
 @Injectable()
 export class RolesService {

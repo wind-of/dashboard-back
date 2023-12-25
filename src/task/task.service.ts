@@ -4,7 +4,7 @@ import { Task as TaskEntity } from "src/entities/task.entity";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CreateTaskDto } from "./dto/create-task.dto";
-import { TaskSearchCriteria } from "./types/search-criteria";
+import { TaskSearchCriteria } from "./types/task-criteria";
 
 @Injectable()
 export class TaskService {

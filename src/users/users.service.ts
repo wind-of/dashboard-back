@@ -6,7 +6,7 @@ import { BCRYPT_ROUNDS } from "src/constants";
 import { User as UserEntity } from "src/entities/user.entity";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";
-import { UserSearchCriteria } from "src/users/types/search-criteria";
+import { UserSearchCriteria } from "src/users/types/user-criteria";
 import { userWithourPassword } from "src/users/helpers";
 
 @Injectable()

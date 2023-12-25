@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Comment as CommentsEntity } from "src/entities/comment.entity";
 import { UpdatedComment } from "src/comment/types/updated-comment";
-import { CommentSerachCriteria } from "src/comment/types/search-criteria";
+import { CommentSerachCriteria } from "src/comment/types/comment-criteria";
 
 @Injectable()
 export class CommentService {
