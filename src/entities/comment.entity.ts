@@ -10,6 +10,12 @@ export class Comment {
 	@Column()
 	content: string;
 
+	@Column()
+	userId: number;
+
+	@Column()
+	taskId: number;
+
 	@ManyToOne(() => UserEntity, (user) => user.comments)
 	user: UserEntity;
 
