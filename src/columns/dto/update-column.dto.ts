@@ -1,3 +1,4 @@
 export class UpdateColumnDto {
-	readonly title?: string;
+	title: string;
+	projectId: number;
 }

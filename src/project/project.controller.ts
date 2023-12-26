@@ -16,9 +16,7 @@ import { UpdateProjectDto } from "src/project/dto/update-project.dto";
 import { ProjectParticipantRoles as Roles } from "src/decorators/project-roles.decorator";
 import { ProjectRolesGuard } from "src/guards/project-roles.guard";
 import { ProjectExistenceGuard } from "src/guards/project-existence.guard";
-import { AddColumnDto } from "src/project/dto/add-column.dto";
 import { ColumnsService } from "src/columns/columns.service";
-import { UpdateColumnDto } from "src/columns/dto/update-column.dto";
 import { TaskService } from "src/task/task.service";
 import { AddTaskDto } from "./dto/add-task.dto";
 import { UpdateTaskDto } from "src/task/dto/update-task.dto";
@@ -87,36 +85,6 @@ export class ProjectController {
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async getColumns(@Param("projectId") projectId: number) {
 		return this.columnsService.findAllBy({ projectId });
-	}
-
-	@Post(":projectId/columns")
-	@UseGuards(ProjectExistenceGuard)
-	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
-	async createColumn(
-		@Param("projectId") projectId: number,
-		@Body() column: AddColumnDto
-	) {
-		return this.columnsService.create({
-			projectId,
-			title: column.title
-		});
-	}
-
-	@Patch(":projectId/columns/:columnId")
-	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
-	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
-	async updateColumn(
-		@Param("columnId") columnId: number,
-		@Body() column: UpdateColumnDto
-	) {
-		return this.columnsService.update(columnId, column);
-	}
-
-	@Delete(":projectId/columns/:columnId")
-	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
-	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
-	async deleteColumn(@Param("columnId") columnId: number) {
-		return this.columnsService.remove(columnId);
 	}
 
 	@Get(":projectId/columns/:columnId/task")

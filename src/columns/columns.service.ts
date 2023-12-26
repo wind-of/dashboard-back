@@ -1,9 +1,9 @@
+import { Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 import { Columns as ColumnEntity } from "src/entities/column.entity";
 import { ColumnSearchCriteria } from "src/columns/types/column-criteria";
-import { CreateColumnDto } from "./dto/create-column.dto";
+import { CreateColumnDto } from "src/columns/dto/create-column.dto";
 
 @Injectable()
 export class ColumnsService {
