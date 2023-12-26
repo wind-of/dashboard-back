@@ -2,7 +2,8 @@ import {
 	Injectable,
 	CanActivate,
 	ExecutionContext,
-	BadRequestException
+	BadRequestException,
+	ForbiddenException
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { ROLES_KEY } from "src/decorators/project-roles.decorator";
@@ -30,6 +31,9 @@ export class ProjectRolesGuard implements CanActivate {
 			userId: request.user.id,
 			projectId
 		});
-		return requiredRoles.includes(participant?.role);
+		if (requiredRoles.includes(participant?.role)) {
+			throw new ForbiddenException("User does not have required roles");
+		}
+		return true;
 	}
 }
