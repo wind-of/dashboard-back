@@ -1,4 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
+import {
+	Injectable,
+	CanActivate,
+	ExecutionContext,
+	BadRequestException
+} from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { ROLES_KEY } from "src/decorators/project-roles.decorator";
 import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
@@ -20,13 +25,11 @@ export class ProjectRolesGuard implements CanActivate {
 		}
 		const request = context.switchToHttp().getRequest();
 		const projectId = request.params?.projectId || request.body?.projectId;
+		if (!projectId) throw new BadRequestException("Project ID is required");
 		const participant = await this.participantsService.findBy({
 			userId: request.user.id,
 			projectId
 		});
-		if (!participant) {
-			return false;
-		}
-		return requiredRoles.includes(participant.role);
+		return requiredRoles.includes(participant?.role);
 	}
 }
