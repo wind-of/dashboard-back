@@ -7,10 +7,10 @@ import {
 	UseGuards,
 	Patch
 } from "@nestjs/common";
-import { AuthenticatedGuard } from "src/guards/authentication.guard";
+import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { ProjectParticipantRoles as Roles } from "src/decorators/project-roles.decorator";
 import { ParticipantRolesEnum as RolesEnum } from "src/participants/enums/roles.enum";
-import { ProjectRolesGuard } from "src/guards/project-roles.guard";
+import { ParticipantRolesGuard } from "src/participants/guards/participant-roles.guard";
 import { TaskService } from "src/task/task.service";
 import { UpdateTaskDto } from "src/task/dto/update-task.dto";
 import { CreateTaskDto } from "src/task/dto/create-task.dto";
@@ -19,9 +19,9 @@ import { TaskExistenceGuard } from "src/task/guards/task-existence.guard";
 import { ColumnExistenceGuard } from "src/columns/guard/column-existence.guard";
 
 @Controller("tasks")
-@UseGuards(AuthenticatedGuard, ProjectRolesGuard, ColumnExistenceGuard)
+@UseGuards(AuthenticatedGuard, ParticipantRolesGuard, ColumnExistenceGuard)
 export class TaskController {
-	constructor(private readonly taskService: TaskService) {}
+	constructor(private taskService: TaskService) {}
 
 	@Post()
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)

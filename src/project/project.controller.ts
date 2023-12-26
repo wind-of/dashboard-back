@@ -11,11 +11,11 @@ import {
 } from "@nestjs/common";
 import { ProjectService } from "src/project/project.service";
 import { CreateProjectDto } from "src/project/dto/create-project.dto";
-import { AuthenticatedGuard } from "src/guards/authentication.guard";
+import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { UpdateProjectDto } from "src/project/dto/update-project.dto";
 import { ProjectParticipantRoles as Roles } from "src/decorators/project-roles.decorator";
-import { ProjectRolesGuard } from "src/guards/project-roles.guard";
-import { ProjectExistenceGuard } from "src/guards/project-existence.guard";
+import { ParticipantRolesGuard } from "src/participants/guards/participant-roles.guard";
+import { ProjectExistenceGuard } from "src/project/guards/project-existence.guard";
 import { ColumnsService } from "src/columns/columns.service";
 import { TaskService } from "src/task/task.service";
 import { ColumnExistenceGuard } from "../columns/guard/column-existence.guard";
@@ -23,13 +23,13 @@ import { ParticipantsService } from "src/participants/participants.service";
 import { ParticipantRolesEnum as RolesEnum } from "src/participants/enums/roles.enum";
 
 @Controller("projects")
-@UseGuards(AuthenticatedGuard, ProjectRolesGuard)
+@UseGuards(AuthenticatedGuard, ParticipantRolesGuard)
 export class ProjectController {
 	constructor(
-		private readonly projectService: ProjectService,
-		private readonly columnsService: ColumnsService,
-		private readonly taskService: TaskService,
-		private readonly participantsService: ParticipantsService
+		private projectService: ProjectService,
+		private columnsService: ColumnsService,
+		private taskService: TaskService,
+		private participantsService: ParticipantsService
 	) {}
 
 	@Get()

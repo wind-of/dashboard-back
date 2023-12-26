@@ -9,7 +9,7 @@ import {
 	Patch,
 	Delete
 } from "@nestjs/common";
-import { AuthenticatedGuard } from "src/guards/authentication.guard";
+import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { UsersService } from "src/users/users.service";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";

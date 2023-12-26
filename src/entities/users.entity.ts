@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { Comment as CommentEntity } from "src/entities/comment.entity";
+import { Comment as CommentEntity } from "src/entities/comments.entity";
 
 @Entity()
 export class User {

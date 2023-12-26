@@ -1,7 +1,7 @@
 import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
 
 export class CreateParticipantDto {
-	projectId: number;
-	userId: number;
-	role?: ParticipantRolesEnum;
+	readonly projectId: number;
+	readonly userId: number;
+	readonly role?: ParticipantRolesEnum;
 }

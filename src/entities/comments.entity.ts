@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { Task as TaskEntity } from "src/entities/task.entity";
-import { User as UserEntity } from "src/entities/user.entity";
+import { Task as TaskEntity } from "src/entities/tasks.entity";
+import { User as UserEntity } from "src/entities/users.entity";
 
 @Entity()
 export class Comment {

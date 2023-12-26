@@ -1,3 +1,3 @@
 export class DeleteParticipantDto {
-	projectId: number;
+	readonly projectId: number;
 }

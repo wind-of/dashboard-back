@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CommentsService } from "src/comments/comments.service";
 import { CommentsController } from "src/comments/comments.controller";
-import { Comment as CommentsEntity } from "src/entities/comment.entity";
+import { Comment as CommentsEntity } from "src/entities/comments.entity";
 import { ProjectModule } from "src/project/project.module";
 import { ParticipantsModule } from "src/participants/participants.module";
 

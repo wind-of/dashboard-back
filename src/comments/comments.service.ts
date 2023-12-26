@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Comment as CommentsEntity } from "src/entities/comment.entity";
-import { UpdatedComment } from "src/comments/types/updated-comment";
+import { Comment as CommentsEntity } from "src/entities/comments.entity";
+import { CommentUpdateData } from "src/comments/types/comment-update";
 import { CommentSerachCriteria } from "src/comments/types/comment-criteria";
 
 @Injectable()
@@ -15,7 +15,7 @@ export class CommentsService {
 		return this.commentsRepository.save(comment);
 	}
 
-	async update(id: number, comment: UpdatedComment) {
+	async update(id: number, comment: CommentUpdateData) {
 		await this.commentsRepository.update({ id }, comment);
 	}
 

@@ -11,7 +11,7 @@ import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
 import { ParticipantsService } from "src/participants/participants.service";
 
 @Injectable()
-export class ProjectRolesGuard implements CanActivate {
+export class ParticipantRolesGuard implements CanActivate {
 	constructor(
 		private participantsService: ParticipantsService,
 		private reflector: Reflector
@@ -31,7 +31,7 @@ export class ProjectRolesGuard implements CanActivate {
 			userId: request.user.id,
 			projectId
 		});
-		if (requiredRoles.includes(participant?.role)) {
+		if (!requiredRoles.includes(participant?.role)) {
 			throw new ForbiddenException("User does not have required roles");
 		}
 		return true;

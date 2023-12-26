@@ -5,8 +5,8 @@ import {
 	OneToMany,
 	OneToOne
 } from "typeorm";
-import { Columns as ColumnEntity } from "src/entities/column.entity";
-import { User as UserEntity } from "src/entities/user.entity";
+import { Columns as ColumnEntity } from "src/entities/columns.entity";
+import { User as UserEntity } from "src/entities/users.entity";
 import { Participants as ParticipantsEntity } from "src/entities/participants.entity";
 
 @Entity()

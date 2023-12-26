@@ -7,17 +7,17 @@ import {
 	Delete,
 	Param
 } from "@nestjs/common";
-import { AuthenticatedGuard } from "src/guards/authentication.guard";
-import { ProjectParticipantGuard } from "src/guards/project-participant.guard";
+import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
+import { ParticipantGuard } from "src/participants/guards/participant.guard";
 import { CommentsService } from "src/comments/comments.service";
 import { CreateCommentDto } from "src/comments/dto/create-comment.dto";
 import { UpdateCommentDto } from "src/comments/dto/update-comment.dto";
 import { DeleteCommentDto } from "src/comments/dto/delete-comment.dto";
-import { ProjectExistenceGuard } from "src/guards/project-existence.guard";
+import { ProjectExistenceGuard } from "src/project/guards/project-existence.guard";
 import { CommentAuthorGuard } from "src/comments/guard/comment-author.guard";
 
 @Controller("comments")
-@UseGuards(AuthenticatedGuard, ProjectExistenceGuard, ProjectParticipantGuard)
+@UseGuards(AuthenticatedGuard, ProjectExistenceGuard, ParticipantGuard)
 export class CommentsController {
 	constructor(private commentsService: CommentsService) {}
 

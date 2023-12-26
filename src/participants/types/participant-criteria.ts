@@ -1,5 +1,5 @@
 export class ParticipantSearchCriteria {
-	id?: number;
-	projectId?: number;
-	userId?: number;
+	readonly id?: number;
+	readonly projectId?: number;
+	readonly userId?: number;
 }

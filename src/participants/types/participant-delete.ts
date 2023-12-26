@@ -1,4 +1,4 @@
 export type ParticipantDeletionData = {
-	projectId: number;
-	userId: number;
+	readonly projectId: number;
+	readonly userId: number;
 };

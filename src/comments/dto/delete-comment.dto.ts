@@ -1,3 +1,3 @@
 export type DeleteCommentDto = {
-	projectId: number;
+	readonly projectId: number;
 };

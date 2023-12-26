@@ -1,4 +1,4 @@
 export type UserSearchCriteria = {
-	id?: number;
-	email?: string;
+	readonly id?: number;
+	readonly email?: string;
 };

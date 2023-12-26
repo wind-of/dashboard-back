@@ -2,14 +2,13 @@ import {
 	BadRequestException,
 	CanActivate,
 	ExecutionContext,
-	Inject,
 	Injectable
 } from "@nestjs/common";
 import { ColumnsService } from "src/columns/columns.service";
 
 @Injectable()
 export class ColumnExistenceGuard implements CanActivate {
-	constructor(@Inject(ColumnsService) private columnService: ColumnsService) {}
+	constructor(private columnService: ColumnsService) {}
 	async canActivate(context: ExecutionContext) {
 		const request = context.switchToHttp().getRequest();
 		const columnId = request.params?.columnId || request.body?.columnId;

@@ -1,4 +1,4 @@
 export type ColumnSearchCriteria = {
-	id?: number;
-	projectId?: number;
+	readonly id?: number;
+	readonly projectId?: number;
 };

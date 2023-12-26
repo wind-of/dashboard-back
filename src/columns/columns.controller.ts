@@ -13,14 +13,14 @@ import { ColumnsService } from "src/columns/columns.service";
 import { UpdateColumnDto } from "src/columns/dto/update-column.dto";
 import { CreateColumnDto } from "src/columns/dto/create-column.dto";
 import { DeleteColumnDto } from "src/columns/dto/delete-column.dto";
-import { ProjectRolesGuard } from "src/guards/project-roles.guard";
-import { AuthenticatedGuard } from "src/guards/authentication.guard";
+import { ParticipantRolesGuard } from "src/participants/guards/participant-roles.guard";
+import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { ColumnExistenceGuard } from "src/columns/guard/column-existence.guard";
 
 @Controller("columns")
-@UseGuards(AuthenticatedGuard, ProjectRolesGuard)
+@UseGuards(AuthenticatedGuard, ParticipantRolesGuard)
 export class ColumnsController {
-	constructor(private readonly columnsService: ColumnsService) {}
+	constructor(private columnsService: ColumnsService) {}
 
 	@Post()
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)

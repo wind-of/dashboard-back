@@ -1,5 +1,5 @@
 export type CommentSerachCriteria = {
-	userId?: number;
-	taskId?: number;
-	id?: number;
+	readonly userId?: number;
+	readonly taskId?: number;
+	readonly id?: number;
 };

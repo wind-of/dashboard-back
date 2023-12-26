@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ColumnsService } from "src/columns/columns.service";
-import { Columns as ColumnsEntity } from "src/entities/column.entity";
+import { Columns as ColumnsEntity } from "src/entities/columns.entity";
 import { ColumnsController } from "./columns.controller";
 import { ParticipantsModule } from "src/participants/participants.module";
 

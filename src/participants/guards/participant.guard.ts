@@ -7,7 +7,7 @@ import {
 import { ParticipantsService } from "src/participants/participants.service";
 
 @Injectable()
-export class ProjectParticipantGuard implements CanActivate {
+export class ParticipantGuard implements CanActivate {
 	constructor(private participantsService: ParticipantsService) {}
 	async canActivate(context: ExecutionContext) {
 		const request = context.switchToHttp().getRequest();

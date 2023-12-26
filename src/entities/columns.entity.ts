@@ -5,8 +5,8 @@ import {
 	OneToMany,
 	ManyToOne
 } from "typeorm";
-import { Task as TaskEntity } from "src/entities/task.entity";
-import { Project as ProjectEntity } from "src/entities/project.entity";
+import { Task as TaskEntity } from "src/entities/tasks.entity";
+import { Project as ProjectEntity } from "src/entities/projects.entity";
 
 @Entity()
 export class Columns {

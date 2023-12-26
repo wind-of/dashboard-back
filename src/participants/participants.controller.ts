@@ -8,17 +8,17 @@ import {
 	Post,
 	UseGuards
 } from "@nestjs/common";
-import { AuthenticatedGuard } from "src/guards/authentication.guard";
+import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { ParticipantsService } from "src/participants/participants.service";
 import { CreateParticipantDto } from "src/participants/dto/create-patricipant.dto";
 import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
 import { UpdateParticipantDto } from "src/participants/dto/update-participant.dto";
 import { DeleteParticipantDto } from "src/participants/dto/delete-participants.dto";
-import { ProjectRolesGuard } from "src/guards/project-roles.guard";
+import { ParticipantRolesGuard } from "src/participants/guards/participant-roles.guard";
 import { ProjectParticipantRoles as Roles } from "src/decorators/project-roles.decorator";
 
 @Controller("participants")
-@UseGuards(AuthenticatedGuard, ProjectRolesGuard)
+@UseGuards(AuthenticatedGuard, ParticipantRolesGuard)
 export class ParticipantsController {
 	constructor(private participantsService: ParticipantsService) {}
 

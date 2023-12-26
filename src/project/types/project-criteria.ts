@@ -1,4 +1,4 @@
 export type ProjectSearchCriteria = {
-	ownerId?: number;
-	id?: number;
+	readonly ownerId?: number;
+	readonly id?: number;
 };

@@ -1,4 +1,4 @@
 export type TaskSearchCriteria = {
-	id?: number;
-	columnId?: number;
+	readonly id?: number;
+	readonly columnId?: number;
 };

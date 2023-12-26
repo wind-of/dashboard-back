@@ -5,8 +5,8 @@ import {
 	OneToMany,
 	ManyToOne
 } from "typeorm";
-import { Columns as ColumnEntity } from "src/entities/column.entity";
-import { Comment as CommentEntity } from "src/entities/comment.entity";
+import { Columns as ColumnEntity } from "src/entities/columns.entity";
+import { Comment as CommentEntity } from "src/entities/comments.entity";
 
 @Entity()
 export class Task {
