@@ -15,9 +15,11 @@ import { TaskService } from "src/task/task.service";
 import { UpdateTaskDto } from "src/task/dto/update-task.dto";
 import { CreateTaskDto } from "src/task/dto/create-task.dto";
 import { DeleteTaskDto } from "src/task/dto/delete-task.dto";
+import { TaskExistenceGuard } from "src/task/guards/task-existence.guard";
+import { ColumnExistenceGuard } from "src/columns/guard/column-existence.guard";
 
 @Controller("tasks")
-@UseGuards(AuthenticatedGuard, ProjectRolesGuard)
+@UseGuards(AuthenticatedGuard, ProjectRolesGuard, ColumnExistenceGuard)
 export class TaskController {
 	constructor(private readonly taskService: TaskService) {}
 
@@ -27,6 +29,7 @@ export class TaskController {
 		return this.taskService.create(task);
 	}
 
+	@UseGuards(TaskExistenceGuard)
 	@Patch(":taskId")
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async updateTask(
@@ -36,6 +39,7 @@ export class TaskController {
 		return this.taskService.update(taskId, task);
 	}
 
+	@UseGuards(TaskExistenceGuard)
 	@Delete(":taskId")
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async deleteTask(

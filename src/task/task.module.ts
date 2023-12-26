@@ -4,9 +4,14 @@ import { TaskService } from "src/task/task.service";
 import { TaskController } from "src/task/task.controller";
 import { Task as TaskEntity } from "src/entities/task.entity";
 import { ParticipantsModule } from "src/participants/participants.module";
+import { ColumnsModule } from "src/columns/columns.module";
 
 @Module({
-	imports: [TypeOrmModule.forFeature([TaskEntity]), ParticipantsModule],
+	imports: [
+		TypeOrmModule.forFeature([TaskEntity]),
+		ParticipantsModule,
+		ColumnsModule
+	],
 	providers: [TaskService],
 	controllers: [TaskController],
 	exports: [TaskService]

@@ -15,6 +15,7 @@ import { CreateColumnDto } from "src/columns/dto/create-column.dto";
 import { DeleteColumnDto } from "src/columns/dto/delete-column.dto";
 import { ProjectRolesGuard } from "src/guards/project-roles.guard";
 import { AuthenticatedGuard } from "src/guards/authentication.guard";
+import { ColumnExistenceGuard } from "src/columns/guard/column-existence.guard";
 
 @Controller("columns")
 @UseGuards(AuthenticatedGuard, ProjectRolesGuard)
@@ -27,6 +28,7 @@ export class ColumnsController {
 		return this.columnsService.create(createColumnDto);
 	}
 
+	@UseGuards(ColumnExistenceGuard)
 	@Patch(":columnId")
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async updateColumn(
@@ -38,6 +40,7 @@ export class ColumnsController {
 		});
 	}
 
+	@UseGuards(ColumnExistenceGuard)
 	@Delete(":columnId")
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async deleteColumn(

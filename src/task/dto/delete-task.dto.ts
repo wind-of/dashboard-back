@@ -1,3 +1,3 @@
 export class DeleteTaskDto {
-	readonly columnId: number;
+	readonly projectId: number;
 }

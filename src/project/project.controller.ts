@@ -18,7 +18,7 @@ import { ProjectRolesGuard } from "src/guards/project-roles.guard";
 import { ProjectExistenceGuard } from "src/guards/project-existence.guard";
 import { ColumnsService } from "src/columns/columns.service";
 import { TaskService } from "src/task/task.service";
-import { ColumnExistenceGuard } from "./guards/column-existence.guard";
+import { ColumnExistenceGuard } from "../columns/guard/column-existence.guard";
 import { ParticipantsService } from "src/participants/participants.service";
 import { ParticipantRolesEnum as RolesEnum } from "src/participants/enums/roles.enum";
 
@@ -84,7 +84,7 @@ export class ProjectController {
 		return this.columnsService.findAllBy({ projectId });
 	}
 
-	@Get(":projectId/columns/:columnId/task")
+	@Get(":projectId/columns/:columnId/tasks")
 	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
 	async getTasks(@Param("columnId") columnId: number) {
 		return this.taskService.findAllBy({ columnId });
