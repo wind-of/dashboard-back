@@ -5,4 +5,5 @@ export class CreateTaskDto {
 	readonly end?: Date;
 	readonly attachment?: string;
 	readonly columnId: number;
+	readonly projectId: number;
 }
