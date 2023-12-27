@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+	Entity,
+	Column,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+	CreateDateColumn,
+	UpdateDateColumn
+} from "typeorm";
 import { Task as TaskEntity } from "src/entities/tasks.entity";
 import { User as UserEntity } from "src/entities/users.entity";
 
@@ -15,6 +22,12 @@ export class Comment {
 
 	@Column()
 	taskId: number;
+
+	@CreateDateColumn()
+	createdAt: Date;
+
+	@UpdateDateColumn()
+	updatedAt: Date;
 
 	@ManyToOne(() => UserEntity, (user) => user.comments)
 	user: UserEntity;
