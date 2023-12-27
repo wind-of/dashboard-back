@@ -77,15 +77,25 @@ export class ProjectController {
 		await this.projectService.remove(id);
 	}
 
-	@Get(":projectId/columns")
 	@UseGuards(ProjectExistenceGuard)
+	@Get(":projectId/columns")
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async getColumns(@Param("projectId") projectId: number) {
 		return this.columnsService.findAllBy({ projectId });
 	}
 
-	@Get(":projectId/columns/:columnId/tasks")
+	@UseGuards(ProjectExistenceGuard)
+	@Get(":projectId/columns/:columnId")
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
+	async getColumn(
+		@Param("projectId") projectId: number,
+		@Param("columnId") columnId: number
+	) {
+		return this.columnsService.findBy({ projectId, id: columnId });
+	}
+
 	@UseGuards(ProjectExistenceGuard, ColumnExistenceGuard)
+	@Get(":projectId/columns/:columnId/tasks")
 	async getTasks(@Param("columnId") columnId: number) {
 		return this.taskService.findAllBy({ columnId });
 	}
