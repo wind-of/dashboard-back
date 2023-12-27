@@ -6,10 +6,10 @@ import {
 	ManyToOne
 } from "typeorm";
 import { Columns as ColumnEntity } from "src/entities/columns.entity";
-import { Comment as CommentEntity } from "src/entities/comments.entity";
+import { Comments as CommentEntity } from "src/entities/comments.entity";
 
 @Entity()
-export class Task {
+export class Tasks {
 	@PrimaryGeneratedColumn()
 	id: number;
 

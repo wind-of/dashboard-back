@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { Project as ProjectEntity } from "src/entities/projects.entity";
-import { User as UserEntity } from "src/entities/users.entity";
+import { Projects as ProjectEntity } from "src/entities/projects.entity";
+import { Users as UserEntity } from "src/entities/users.entity";
 import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
 
 @Entity()

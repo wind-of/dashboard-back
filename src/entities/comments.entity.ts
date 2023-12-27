@@ -6,11 +6,11 @@ import {
 	CreateDateColumn,
 	UpdateDateColumn
 } from "typeorm";
-import { Task as TaskEntity } from "src/entities/tasks.entity";
-import { User as UserEntity } from "src/entities/users.entity";
+import { Tasks as TaskEntity } from "src/entities/tasks.entity";
+import { Users as UserEntity } from "src/entities/users.entity";
 
 @Entity()
-export class Comment {
+export class Comments {
 	@PrimaryGeneratedColumn()
 	id: number;
 
