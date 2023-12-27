@@ -4,7 +4,7 @@ import {
 	ExecutionContext,
 	Injectable
 } from "@nestjs/common";
-import { TaskService } from "src/task/task.service";
+import { TaskService } from "src/tasks/tasks.service";
 
 @Injectable()
 export class TaskExistenceGuard implements CanActivate {

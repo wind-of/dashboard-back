@@ -7,7 +7,7 @@ import { AppService } from "src/app.service";
 import { AuthModule } from "src/auth/auth.module";
 import { UsersModule } from "src/users/users.module";
 import { ProjectModule } from "src/project/project.module";
-import { TaskModule } from "src/task/task.module";
+import { TaskModule } from "src/tasks/tasks.module";
 import { CommentsModule } from "src/comments/comments.module";
 import { ColumnsModule } from "src/columns/columns.module";
 import { ParticipantsModule } from "./participants/participants.module";

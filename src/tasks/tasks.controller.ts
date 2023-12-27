@@ -11,11 +11,11 @@ import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { ProjectParticipantRoles as Roles } from "src/decorators/project-roles.decorator";
 import { ParticipantRolesEnum as RolesEnum } from "src/participants/enums/roles.enum";
 import { ParticipantRolesGuard } from "src/participants/guards/participant-roles.guard";
-import { TaskService } from "src/task/task.service";
-import { UpdateTaskDto } from "src/task/dto/update-task.dto";
-import { CreateTaskDto } from "src/task/dto/create-task.dto";
-import { DeleteTaskDto } from "src/task/dto/delete-task.dto";
-import { TaskExistenceGuard } from "src/task/guards/task-existence.guard";
+import { TaskService } from "src/tasks/tasks.service";
+import { UpdateTaskDto } from "src/tasks/dto/update-task.dto";
+import { CreateTaskDto } from "src/tasks/dto/create-task.dto";
+import { DeleteTaskDto } from "src/tasks/dto/delete-task.dto";
+import { TaskExistenceGuard } from "src/tasks/guards/task-existence.guard";
 import { ColumnExistenceGuard } from "src/columns/guard/column-existence.guard";
 
 @Controller("tasks")

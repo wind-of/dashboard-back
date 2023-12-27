@@ -17,7 +17,7 @@ import { ProjectParticipantRoles as Roles } from "src/decorators/project-roles.d
 import { ParticipantRolesGuard } from "src/participants/guards/participant-roles.guard";
 import { ProjectExistenceGuard } from "src/project/guards/project-existence.guard";
 import { ColumnsService } from "src/columns/columns.service";
-import { TaskService } from "src/task/task.service";
+import { TaskService } from "src/tasks/tasks.service";
 import { ColumnExistenceGuard } from "../columns/guard/column-existence.guard";
 import { ParticipantsService } from "src/participants/participants.service";
 import { ParticipantRolesEnum as RolesEnum } from "src/participants/enums/roles.enum";
