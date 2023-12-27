@@ -12,6 +12,12 @@ export class ColumnsService {
 		private columnsRepository: Repository<ColumnEntity>
 	) {}
 
+	private readonly relations = {
+		tasks: {
+			comments: true
+		}
+	};
+
 	create(column: CreateColumnDto) {
 		return this.columnsRepository.save(column);
 	}
@@ -25,10 +31,16 @@ export class ColumnsService {
 	}
 
 	findBy(criteria: ColumnSearchCriteria) {
-		return this.columnsRepository.findOneBy(criteria);
+		return this.columnsRepository.findOne({
+			relations: this.relations,
+			where: criteria
+		});
 	}
 
 	findAllBy(criteria: ColumnSearchCriteria) {
-		return this.columnsRepository.findBy(criteria);
+		return this.columnsRepository.find({
+			relations: this.relations,
+			where: criteria
+		});
 	}
 }

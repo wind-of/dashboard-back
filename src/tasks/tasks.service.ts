@@ -13,14 +13,19 @@ export class TaskService {
 		private tasksRepository: Repository<TaskEntity>
 	) {}
 
+	private readonly relations = {
+		comments: true
+	};
+
 	async create(task: CreateTaskDto) {
 		return this.tasksRepository.save(task);
 	}
 
 	async update(id: number, task: UpdateTaskDto) {
 		await this.tasksRepository.update(id, task);
-		const updatedTask = await this.tasksRepository.findOneBy({
-			id
+		const updatedTask = await this.tasksRepository.findOne({
+			where: { id },
+			relations: this.relations
 		});
 		return updatedTask;
 	}
@@ -30,10 +35,16 @@ export class TaskService {
 	}
 
 	async findBy(criteria: TaskSearchCriteria) {
-		return this.tasksRepository.findOneBy(criteria);
+		return this.tasksRepository.findOne({
+			where: criteria,
+			relations: this.relations
+		});
 	}
 
 	async findAllBy(criteria: TaskSearchCriteria) {
-		return this.tasksRepository.findBy(criteria);
+		return this.tasksRepository.find({
+			where: criteria,
+			relations: this.relations
+		});
 	}
 }

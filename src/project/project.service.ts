@@ -16,6 +16,15 @@ export class ProjectService {
 		private participantService: ParticipantsService
 	) {}
 
+	private readonly relations = {
+		participants: true,
+		columns: {
+			tasks: {
+				comments: true
+			}
+		}
+	};
+
 	async create(project: ProjectCreateData) {
 		return this.projectsRepository.save(project);
 	}
@@ -30,11 +39,17 @@ export class ProjectService {
 	}
 
 	async findBy(criteria: ProjectSearchCriteria) {
-		return this.projectsRepository.findOneBy(criteria);
+		return this.projectsRepository.findOne({
+			relations: this.relations,
+			where: criteria
+		});
 	}
 
 	async findAllBy(criteria: ProjectSearchCriteria) {
-		return this.projectsRepository.findBy(criteria);
+		return this.projectsRepository.find({
+			relations: this.relations,
+			where: criteria
+		});
 	}
 
 	async isOwner(userId: number, projectId: number) {
