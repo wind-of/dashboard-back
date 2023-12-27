@@ -24,6 +24,6 @@ export class Projects {
 	@OneToMany(() => ColumnEntity, (column) => column.project)
 	columns: ColumnEntity[];
 
-	@OneToMany(() => ParticipantsEntity, (member) => member.project)
+	@OneToMany(() => ParticipantsEntity, (participant) => participant.project)
 	participants: ParticipantsEntity[];
 }
