@@ -1,11 +1,13 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
+import helmet from "helmet";
+import * as cookieParser from "cookie-parser";
 import * as session from "express-session";
 import * as passport from "passport";
-import * as cookieParser from "cookie-parser";
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
+	app.use(helmet());
 	app.use(cookieParser());
 	app.use(
 		session({
