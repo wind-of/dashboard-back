@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Project as ProjectEntity } from "src/entities/projects.entity";
+import { Projects as ProjectEntity } from "src/entities/projects.entity";
 import { ProjectCreateData } from "src/project/types/project-create";
 import { UpdateProjectDto } from "./dto/update-project.dto";
 import { ProjectSearchCriteria } from "src/project/types/project-criteria";

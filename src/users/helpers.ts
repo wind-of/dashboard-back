@@ -1,4 +1,4 @@
-import { User as UserEntity } from "src/entities/users.entity";
+import { Users as UserEntity } from "src/entities/users.entity";
 
 export function userWithourPassword(user: UserEntity) {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars

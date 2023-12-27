@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Comment as CommentsEntity } from "src/entities/comments.entity";
+import { Comments as CommentsEntity } from "src/entities/comments.entity";
 import { CommentUpdateData } from "src/comments/types/comment-update";
 import { CommentSerachCriteria } from "src/comments/types/comment-criteria";
 

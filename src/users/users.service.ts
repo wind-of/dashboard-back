@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { BCRYPT_ROUNDS } from "src/constants";
-import { User as UserEntity } from "src/entities/users.entity";
+import { Users as UserEntity } from "src/entities/users.entity";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";
 import { UserSearchCriteria } from "src/users/types/user-criteria";
