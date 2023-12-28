@@ -23,10 +23,10 @@ export class Tasks {
 	description: string;
 
 	@Column()
-	start: Date;
+	startDate: Date;
 
 	@Column()
-	end: Date;
+	expirationDate: Date;
 
 	@Column()
 	attachment: string;
