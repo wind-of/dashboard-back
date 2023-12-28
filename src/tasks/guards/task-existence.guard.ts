@@ -12,10 +12,8 @@ export class TaskExistenceGuard implements CanActivate {
 	async canActivate(context: ExecutionContext) {
 		const request = context.switchToHttp().getRequest();
 		const taskId = request.params?.taskId;
-		const columnId = request.body?.columnId;
 		if (!taskId) throw new BadRequestException("Task ID is required");
-		if (!columnId) throw new BadRequestException("Column ID is required");
-		const task = await this.taskService.findBy({ id: taskId, columnId });
+		const task = await this.taskService.findBy({ id: taskId });
 		if (!task) throw new BadRequestException("Task not found");
 		return true;
 	}
