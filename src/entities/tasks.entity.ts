@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import { Columns as ColumnEntity } from "src/entities/columns.entity";
 import { Comments as CommentEntity } from "src/entities/comments.entity";
+import { Tags as TagsEntity } from "src/entities/tags.entity";
 
 @Entity()
 export class Tasks {
@@ -41,4 +42,7 @@ export class Tasks {
 
 	@OneToMany(() => CommentEntity, (comment) => comment.task)
 	comments: CommentEntity[];
+
+	@OneToMany(() => TagsEntity, (tags) => tags.task)
+	tags: TagsEntity[];
 }
