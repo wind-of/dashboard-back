@@ -5,14 +5,14 @@ import { TaskController } from "src/tasks/tasks.controller";
 import { Tasks as TaskEntity } from "src/entities/tasks.entity";
 import { ParticipantsModule } from "src/participants/participants.module";
 import { ColumnsModule } from "src/columns/columns.module";
-import { TagsService } from "src/tags/tags.service";
+import { TagsModule } from "src/tags/tags.module";
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([TaskEntity]),
 		ParticipantsModule,
 		ColumnsModule,
-		TagsService
+		TagsModule
 	],
 	providers: [TaskService],
 	controllers: [TaskController],
