@@ -37,6 +37,13 @@ export class ProjectController {
 		return this.projectService.findAllBy({ ownerId: req.user.id });
 	}
 
+	@Get("participating")
+	async getParticipatingProjects(@Request() req) {
+		return this.projectService.findAllBy({
+			participants: { userId: req.user.id }
+		});
+	}
+
 	@UseGuards(ProjectExistenceGuard)
 	@Get(":projectId")
 	async getProject(@Param("projectId") id: number) {
