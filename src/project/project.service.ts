@@ -3,8 +3,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Projects as ProjectEntity } from "src/entities/projects.entity";
 import { ProjectCreateData } from "src/project/types/project-create";
-import { UpdateProjectDto } from "./dto/update-project.dto";
+import { UpdateProjectDto } from "src/project/dto/update-project.dto";
 import { ProjectSearchCriteria } from "src/project/types/project-criteria";
+import { ProjectRelations } from "src/project/types/project.relations";
 import { ParticipantsService } from "src/participants/participants.service";
 import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
 
@@ -16,7 +17,7 @@ export class ProjectService {
 		private participantService: ParticipantsService
 	) {}
 
-	private readonly relations = {
+	private readonly relations: ProjectRelations = {
 		participants: true,
 		columns: {
 			tasks: {
@@ -45,10 +46,10 @@ export class ProjectService {
 		});
 	}
 
-	async findAllBy(criteria: ProjectSearchCriteria) {
+	async findAllBy(criteria: ProjectSearchCriteria, relations = this.relations) {
 		return this.projectsRepository.find({
-			relations: this.relations,
-			where: criteria
+			where: criteria,
+			relations
 		});
 	}
 

@@ -39,9 +39,14 @@ export class ProjectController {
 
 	@Get("participating")
 	async getParticipatingProjects(@Request() req) {
-		return this.projectService.findAllBy({
+		const participatingProjects = await this.projectService.findAllBy({
 			participants: { userId: req.user.id }
 		});
+		const projects = await this.projectService.findAllBy(
+			participatingProjects.map(({ id }) => ({ id })),
+			{ participants: true }
+		);
+		return projects;
 	}
 
 	@UseGuards(ProjectExistenceGuard)
