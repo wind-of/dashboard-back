@@ -6,6 +6,7 @@ import { Tasks as TaskEntity } from "src/entities/tasks.entity";
 import { CreateTaskDto } from "src/tasks/dto/create-task.dto";
 import { TaskSearchCriteria } from "src/tasks/types/task-criteria";
 import { TagsService } from "src/tags/tags.service";
+import { TaskRelations } from "./types/task.relations";
 
 @Injectable()
 export class TaskService {
@@ -15,7 +16,7 @@ export class TaskService {
 		private tagsService: TagsService
 	) {}
 
-	private readonly relations = {
+	private readonly relations: TaskRelations = {
 		comments: true,
 		tags: true
 	};

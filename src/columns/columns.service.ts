@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Columns as ColumnEntity } from "src/entities/columns.entity";
 import { ColumnSearchCriteria } from "src/columns/types/column-criteria";
 import { CreateColumnDto } from "src/columns/dto/create-column.dto";
+import { ColumnRelations } from "./types/columns.relations";
 
 @Injectable()
 export class ColumnsService {
@@ -12,7 +13,7 @@ export class ColumnsService {
 		private columnsRepository: Repository<ColumnEntity>
 	) {}
 
-	private readonly relations = {
+	private readonly relations: ColumnRelations = {
 		tasks: {
 			comments: true
 		}
