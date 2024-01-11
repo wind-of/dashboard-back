@@ -33,7 +33,7 @@ export class ProjectController {
 	) {}
 
 	@Get()
-	async getAllProjects(@Request() req) {
+	async getAllUserProjects(@Request() req) {
 		return this.projectService.findAllBy({ ownerId: req.user.id });
 	}
 
@@ -51,6 +51,7 @@ export class ProjectController {
 
 	@UseGuards(ProjectExistenceGuard)
 	@Get(":projectId")
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
 	async getProject(@Param("projectId") id: number) {
 		return this.projectService.findBy({ id });
 	}

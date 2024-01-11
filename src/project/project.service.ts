@@ -39,10 +39,10 @@ export class ProjectService {
 		await this.projectsRepository.delete(id);
 	}
 
-	async findBy(criteria: ProjectSearchCriteria) {
+	async findBy(criteria: ProjectSearchCriteria, relations = this.relations) {
 		return this.projectsRepository.findOne({
-			relations: this.relations,
-			where: criteria
+			where: criteria,
+			relations
 		});
 	}
 
