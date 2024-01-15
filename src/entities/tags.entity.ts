@@ -10,7 +10,13 @@ export class Tags {
 	color: string;
 
 	@Column()
-	taskId: number;
+	title: string;
+
+	@Column()
+	taskId?: number;
+
+	@Column()
+	projectId?: number;
 
 	@ManyToOne(() => TaskEntity, (task) => task.tags, {
 		onDelete: "CASCADE"

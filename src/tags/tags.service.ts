@@ -1,8 +1,7 @@
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Tags as TagsEntity } from "src/entities/tags.entity";
-import { TagSearchCriteria } from "src/tags/types/tag-criteria";
 import { TagCreateData } from "./types/tag-create";
 
 @Injectable()
@@ -12,19 +11,19 @@ export class TagsService {
 		private tagsRepository: Repository<TagsEntity>
 	) {}
 
-	create(tag: TagCreateData | TagCreateData[]) {
-		return this.tagsRepository.save(tag as TagCreateData);
+	create(tags: TagCreateData[]) {
+		return this.tagsRepository.save(tags);
 	}
 
-	async remove(criteria: TagSearchCriteria) {
+	async remove(criteria: FindOptionsWhere<TagsEntity>) {
 		await this.tagsRepository.delete(criteria);
 	}
 
-	findBy(criteria: TagSearchCriteria) {
+	findBy(criteria: FindOptionsWhere<TagsEntity>) {
 		return this.tagsRepository.findOneBy(criteria);
 	}
 
-	findAllBy(criteria: TagSearchCriteria) {
+	findAllBy(criteria: FindOptionsWhere<TagsEntity>) {
 		return this.tagsRepository.findBy(criteria);
 	}
 }

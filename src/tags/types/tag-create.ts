@@ -1,4 +1,5 @@
-export type TagCreateData = {
-	readonly taskId: number;
-	readonly color: string;
-};
+import { TagProto } from "./tag-proto";
+
+export type TagCreateData =
+	| (TagProto & { taskId: number })
+	| (TagProto & { projectId: number });

@@ -8,26 +8,34 @@ import { ProjectSearchCriteria } from "src/project/types/project-criteria";
 import { ProjectRelations } from "src/project/types/project.relations";
 import { ParticipantsService } from "src/participants/participants.service";
 import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
+import { TagsService } from "src/tags/tags.service";
+import { DEFAULT_TAGS } from "src/constants";
 
 @Injectable()
 export class ProjectService {
 	constructor(
 		@InjectRepository(ProjectEntity)
 		private projectsRepository: Repository<ProjectEntity>,
-		private participantService: ParticipantsService
+		private participantService: ParticipantsService,
+		private tagsService: TagsService
 	) {}
 
 	private readonly relations: ProjectRelations = {
 		participants: true,
 		columns: {
 			tasks: {
-				comments: true
+				comments: true,
+				tags: true
 			}
 		}
 	};
 
 	async create(project: ProjectCreateData) {
-		return this.projectsRepository.save(project);
+		const newProject = await this.projectsRepository.save(project);
+		await this.tagsService.create(
+			DEFAULT_TAGS.map((v) => ({ ...v, projectId: newProject.id }))
+		);
+		return newProject;
 	}
 
 	async update(id: number, project: UpdateProjectDto) {

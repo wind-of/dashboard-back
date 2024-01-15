@@ -26,14 +26,15 @@ export class TaskService {
 	}
 
 	async update(taskId: number, task: UpdateTaskDto) {
-		await this.tasksRepository.update(taskId, task);
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { tags = [], projectId, ...updatedTask } = task;
+		await this.tasksRepository.update(taskId, updatedTask);
 		await this.tagsService.remove({ taskId });
-		await this.tagsService.create(task.tags);
-		const updatedTask = await this.tasksRepository.findOne({
+		await this.tagsService.create(tags.map((tag) => ({ ...tag, taskId })));
+		return this.tasksRepository.findOne({
 			where: { id: taskId },
 			relations: this.relations
 		});
-		return updatedTask;
 	}
 
 	async remove(id: number): Promise<void> {

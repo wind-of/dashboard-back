@@ -1,4 +1,4 @@
-import { CreateTagDto } from "src/tags/dto/create-tag.dto";
+import { TagProto } from "src/tags/types/tag-proto";
 
 export class UpdateTaskDto {
 	readonly title?: string;
@@ -6,7 +6,7 @@ export class UpdateTaskDto {
 	readonly start?: Date;
 	readonly end?: Date;
 	readonly attachment?: string;
-	readonly tags?: CreateTagDto[];
-	readonly columnId?: number;
+	readonly tags?: TagProto[];
+	readonly columnId: number;
 	readonly projectId: number;
 }
