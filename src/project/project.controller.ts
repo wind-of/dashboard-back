@@ -56,6 +56,13 @@ export class ProjectController {
 		return this.projectService.findBy({ id });
 	}
 
+	@UseGuards(ProjectExistenceGuard)
+	@Get(":projectId/tags")
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
+	async getProjectTags(@Param("projectId") id: number) {
+		return this.projectService.getTags(id);
+	}
+
 	@Post()
 	async createProject(
 		@Request() req,

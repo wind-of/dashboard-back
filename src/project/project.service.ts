@@ -78,4 +78,8 @@ export class ProjectService {
 		const member = await this.participantService.findBy({ userId, projectId });
 		return !!member;
 	}
+
+	async getTags(projectId: number) {
+		return this.tagsService.findAllBy({ projectId });
+	}
 }
