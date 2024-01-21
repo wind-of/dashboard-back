@@ -77,7 +77,7 @@ export class ProjectController {
 			userId: req.user.id,
 			role: RolesEnum.Owner
 		});
-		return project;
+		return this.projectService.findBy({ id: project.id });
 	}
 
 	@UseGuards(ProjectExistenceGuard)
