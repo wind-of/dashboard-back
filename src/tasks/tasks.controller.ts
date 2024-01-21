@@ -16,10 +16,9 @@ import { UpdateTaskDto } from "src/tasks/dto/update-task.dto";
 import { CreateTaskDto } from "src/tasks/dto/create-task.dto";
 import { DeleteTaskDto } from "src/tasks/dto/delete-task.dto";
 import { TaskExistenceGuard } from "src/tasks/guards/task-existence.guard";
-import { ColumnExistenceGuard } from "src/columns/guard/column-existence.guard";
 
 @Controller("tasks")
-@UseGuards(AuthenticatedGuard, ParticipantRolesGuard, ColumnExistenceGuard)
+@UseGuards(AuthenticatedGuard, ParticipantRolesGuard)
 export class TaskController {
 	constructor(private taskService: TaskService) {}
 
