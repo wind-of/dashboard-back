@@ -7,6 +7,9 @@ export class Tags {
 	id: number;
 
 	@Column()
+	uniqueId: string;
+
+	@Column()
 	color: string;
 
 	@Column()

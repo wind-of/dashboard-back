@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 import { Projects as ProjectEntity } from "src/entities/projects.entity";
 import { ProjectCreateData } from "src/project/types/project-create";
 import { UpdateProjectDto } from "src/project/dto/update-project.dto";
@@ -80,6 +80,9 @@ export class ProjectService {
 	}
 
 	async getTags(projectId: number) {
-		return this.tagsService.findAllBy({ projectId });
+		return this.tagsService.findAllBy({
+			projectId,
+			taskId: IsNull()
+		});
 	}
 }
