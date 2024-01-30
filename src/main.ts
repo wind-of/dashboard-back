@@ -13,7 +13,8 @@ async function bootstrap() {
 		session({
 			secret: "keyboard",
 			resave: false,
-			saveUninitialized: false
+			saveUninitialized: false,
+			cookie: { maxAge: 86400000 }
 		})
 	);
 	app.use(passport.initialize());
