@@ -1,12 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { BCRYPT_ROUNDS } from "src/constants";
 import { Users as UserEntity } from "src/entities/users.entity";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";
-import { UserSearchCriteria } from "src/users/types/user-criteria";
 import { userWithourPassword } from "src/users/helpers";
 
 @Injectable()
@@ -47,7 +46,11 @@ export class UsersService {
 		await this.usersRepository.delete(id);
 	}
 
-	async findBy(criteria: UserSearchCriteria) {
+	async findBy(criteria: FindOptionsWhere<UserEntity>) {
 		return this.usersRepository.findOneBy(criteria);
+	}
+
+	async findAllBy(criteria: FindOptionsWhere<UserEntity>) {
+		return this.usersRepository.findBy(criteria);
 	}
 }

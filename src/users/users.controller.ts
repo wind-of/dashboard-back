@@ -7,14 +7,16 @@ import {
 	Post,
 	Body,
 	Patch,
-	Delete
+	Delete,
+	Query
 } from "@nestjs/common";
 import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { UsersService } from "src/users/users.service";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";
 import { ProfileOwnerGuard } from "src/users/guards/profile-owner.guard";
-import { userWithourPrivate } from "src/users/helpers";
+import { userWithourPassword, userWithourPrivate } from "src/users/helpers";
+import { Raw } from "typeorm";
 
 @Controller("users")
 export class UsersController {
@@ -24,6 +26,16 @@ export class UsersController {
 	@Get("profile")
 	getProfile(@Request() req) {
 		return req.user;
+	}
+
+	@UseGuards(AuthenticatedGuard)
+	@Get("project")
+	async getUsersByProjectId(@Query() query) {
+		const ids = query.userIds.split(",").map(Number);
+		const users = await this.usersService.findAllBy({
+			id: Raw((alias) => `${alias} IN (${ids})`)
+		});
+		return users.map((user) => userWithourPassword(user));
 	}
 
 	@UseGuards(AuthenticatedGuard)
