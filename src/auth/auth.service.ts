@@ -30,7 +30,7 @@ export class AuthService {
 		return {
 			accessToken: this.jwtService.sign(payload, {
 				secret: process.env.JWT_SECRET,
-				expiresIn: "60s"
+				expiresIn: "10h"
 			}),
 			user: currentUser
 		};
