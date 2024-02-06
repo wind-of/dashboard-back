@@ -31,14 +31,14 @@ export class ParticipantsController {
 		});
 	}
 
-	@Patch(":participantId")
+	@Patch(":userId")
 	@Roles(ParticipantRolesEnum.Owner, ParticipantRolesEnum.Admin)
 	async updateParticipant(
-		@Param("participantId") participantId: number,
+		@Param("userId") userId: number,
 		@Body() updateParticipantDto: UpdateParticipantDto
 	) {
 		return this.participantsService.update({
-			userId: participantId,
+			userId,
 			...updateParticipantDto
 		});
 	}
