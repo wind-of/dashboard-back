@@ -6,6 +6,7 @@ import {
 	Param,
 	Patch,
 	Post,
+	Req,
 	UseGuards
 } from "@nestjs/common";
 import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
@@ -35,10 +36,12 @@ export class ParticipantsController {
 	@Roles(ParticipantRolesEnum.Owner, ParticipantRolesEnum.Admin)
 	async updateParticipant(
 		@Param("userId") userId: number,
-		@Body() updateParticipantDto: UpdateParticipantDto
+		@Body() updateParticipantDto: UpdateParticipantDto,
+		@Req() req
 	) {
 		return this.participantsService.update({
 			userId,
+			commiterId: req.user.id,
 			...updateParticipantDto
 		});
 	}

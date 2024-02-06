@@ -7,24 +7,42 @@ import { ParticipantCreationData } from "src/participants/types/participant-crea
 import { ParticipantUpdateData } from "src/participants/types/participant-update";
 import { ParticipantDeletionData } from "src/participants/types/participant-delete";
 import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
+import { isAllowedToUpdateRole } from "src/participants/helpers";
+import { Projects as ProjectsEntity } from "src/entities/projects.entity";
 
 @Injectable()
 export class ParticipantsService {
 	constructor(
 		@InjectRepository(ParticipantsEntity)
-		private participantsRepository: Repository<ParticipantsEntity>
+		private participantsRepository: Repository<ParticipantsEntity>,
+		@InjectRepository(ProjectsEntity)
+		private projectsRepository: Repository<ProjectsEntity>
 	) {}
 
 	async create(participant: ParticipantCreationData) {
 		return this.participantsRepository.save(participant);
 	}
 
-	async update(participant: ParticipantUpdateData) {
-		const criteria = {
-			userId: participant.userId,
-			projectId: participant.projectId
-		};
-		await this.participantsRepository.update(criteria, participant);
+	async update({ userId, projectId, commiterId, role: updatedRole }) {
+		const criteria = { userId, projectId };
+		const commiter = await this.participantsRepository.findOneBy({
+			userId: commiterId,
+			projectId
+		});
+		if (!isAllowedToUpdateRole(updatedRole, commiter.role)) {
+			return;
+		}
+		if (updatedRole === ParticipantRolesEnum.Owner) {
+			await this.participantsRepository.update(
+				{ projectId, userId: commiterId },
+				{ role: ParticipantRolesEnum.Admin }
+			);
+			await this.projectsRepository.update(
+				{ id: projectId },
+				{ ownerId: userId }
+			);
+		}
+		await this.participantsRepository.update(criteria, { role: updatedRole });
 		return this.findBy(criteria);
 	}
 
