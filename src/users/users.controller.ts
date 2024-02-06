@@ -8,7 +8,8 @@ import {
 	Body,
 	Patch,
 	Delete,
-	Query
+	Query,
+	Req
 } from "@nestjs/common";
 import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { UsersService } from "src/users/users.service";
@@ -36,6 +37,12 @@ export class UsersController {
 			id: Raw((alias) => `${alias} IN (${ids})`)
 		});
 		return users.map((user) => userWithourPassword(user));
+	}
+
+	@UseGuards(AuthenticatedGuard)
+	@Get("me")
+	async getMe(@Req() req) {
+		return req.user;
 	}
 
 	@UseGuards(AuthenticatedGuard)
