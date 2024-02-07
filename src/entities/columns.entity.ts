@@ -19,6 +19,9 @@ export class Columns {
 	@Column()
 	projectId: number;
 
+	@Column()
+	lexorank: string;
+
 	@ManyToOne(() => ProjectEntity, (project) => project.columns, {
 		onDelete: "CASCADE"
 	})

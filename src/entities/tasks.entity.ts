@@ -35,6 +35,9 @@ export class Tasks {
 	@Column()
 	columnId: number;
 
+	@Column()
+	lexorank: string;
+
 	@ManyToOne(() => ColumnEntity, (column) => column.tasks, {
 		onDelete: "CASCADE"
 	})
