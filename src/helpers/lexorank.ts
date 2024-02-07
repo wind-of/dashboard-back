@@ -1,11 +1,11 @@
 const ALPHABET_SIZE = 26;
-const START_POSITION = "aaaa";
-const END_POSITION = "zzzz";
+export const RANK_START_POSITION = "aaaaa";
+export const RANK_END_POSITION = "zzzzz";
 const TASK_FOR_PROJECT_LIMIT_TOTAL = 10;
 
 export function getDefaultRank(forNumOfTasks = TASK_FOR_PROJECT_LIMIT_TOTAL) {
-	const startPos = START_POSITION;
-	const endPos = END_POSITION;
+	const startPos = RANK_START_POSITION;
+	const endPos = RANK_END_POSITION;
 
 	const startCode = startPos.charCodeAt(0);
 	const endCode = endPos.charCodeAt(0);
@@ -123,4 +123,11 @@ export function getRankBetween(firstRank, secondRank) {
 	}
 
 	return newElement;
+}
+
+export function getNextRank(previousRank) {
+	return previousRank + "z";
+}
+export function getAheadRank() {
+	return "a";
 }

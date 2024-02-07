@@ -7,6 +7,7 @@ import { CreateTaskDto } from "src/tasks/dto/create-task.dto";
 import { TaskSearchCriteria } from "src/tasks/types/task-criteria";
 import { TagsService } from "src/tags/tags.service";
 import { TaskRelations } from "./types/task.relations";
+import { RANK_START_POSITION, getNextRank } from "src/helpers/lexorank";
 
 @Injectable()
 export class TaskService {
@@ -22,8 +23,16 @@ export class TaskService {
 	};
 
 	async create(task: CreateTaskDto) {
-		return this.tasksRepository.save(task);
+		const [last] = await this.tasksRepository.find({
+			order: { lexorank: "DESC" },
+			take: 1
+		});
+		const lexorank = last ? getNextRank(last.lexorank) : RANK_START_POSITION;
+		return this.tasksRepository.save({ ...task, lexorank });
 	}
+
+	// async updateLexorank(taskId: number, previousLexorank: string, nextLexorank) {
+	// }
 
 	async update(taskId: number, task: UpdateTaskDto) {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,7 +53,8 @@ export class TaskService {
 	async findBy(criteria: TaskSearchCriteria) {
 		return this.tasksRepository.findOne({
 			where: criteria,
-			relations: this.relations
+			relations: this.relations,
+			order: { lexorank: "ASC" }
 		});
 	}
 
