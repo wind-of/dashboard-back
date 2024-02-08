@@ -16,6 +16,7 @@ import { UpdateTaskDto } from "src/tasks/dto/update-task.dto";
 import { CreateTaskDto } from "src/tasks/dto/create-task.dto";
 import { DeleteTaskDto } from "src/tasks/dto/delete-task.dto";
 import { TaskExistenceGuard } from "src/tasks/guards/task-existence.guard";
+import { UpdateTaskPositionDto } from "src/tasks/dto/update-task-position.dto";
 
 @Controller("tasks")
 @UseGuards(AuthenticatedGuard, ParticipantRolesGuard)
@@ -36,6 +37,21 @@ export class TaskController {
 		@Body() task: UpdateTaskDto
 	) {
 		return this.taskService.update(taskId, task);
+	}
+
+	@UseGuards(TaskExistenceGuard)
+	@Patch(":taskId/position")
+	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
+	async updateTaskPosition(
+		@Param("taskId") taskId: number,
+		@Body() updateTaskPositionDto: UpdateTaskPositionDto
+	) {
+		return this.taskService.updateTaskPosition(
+			taskId,
+			updateTaskPositionDto.columnId,
+			updateTaskPositionDto.position,
+			updateTaskPositionDto.oldPosition
+		);
 	}
 
 	@UseGuards(TaskExistenceGuard)
