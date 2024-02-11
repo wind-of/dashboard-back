@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import { Comments as CommentsEntity } from "src/entities/comments.entity";
 import { CommentUpdateData } from "src/comments/types/comment-update";
-import { CommentSerachCriteria } from "src/comments/types/comment-criteria";
 
 @Injectable()
 export class CommentsService {
@@ -19,11 +18,11 @@ export class CommentsService {
 		await this.commentsRepository.update({ id }, comment);
 	}
 
-	async findBy(criteria: CommentSerachCriteria) {
+	async findBy(criteria: FindOptionsWhere<CommentsEntity>) {
 		return this.commentsRepository.findOneBy(criteria);
 	}
 
-	async findAllBy(criteria: CommentSerachCriteria) {
+	async findAllBy(criteria: FindOptionsWhere<CommentsEntity>) {
 		return this.commentsRepository.findBy(criteria);
 	}
 

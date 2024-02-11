@@ -1,9 +1,10 @@
-import { ParticipantSearchCriteria } from "src/participants/types/participant-criteria";
+import { FindOptionsWhere } from "typeorm";
+import { Comments as CommentsEntity } from "src/entities/comments.entity";
 
 export type SingleProjectSearchCriteria = {
 	readonly ownerId?: number;
 	readonly id?: number;
-	readonly participants?: ParticipantSearchCriteria;
+	readonly participants?: FindOptionsWhere<CommentsEntity>;
 };
 
 export type ProjectSearchCriteria =

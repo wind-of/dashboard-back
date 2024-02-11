@@ -1,8 +1,7 @@
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Columns as ColumnEntity } from "src/entities/columns.entity";
-import { ColumnSearchCriteria } from "src/columns/types/column-criteria";
 import { CreateColumnDto } from "src/columns/dto/create-column.dto";
 import { ColumnRelations } from "./types/columns.relations";
 
@@ -31,14 +30,14 @@ export class ColumnsService {
 		await this.columnsRepository.delete({ id });
 	}
 
-	findBy(criteria: ColumnSearchCriteria) {
+	findBy(criteria: FindOptionsWhere<ColumnEntity>) {
 		return this.columnsRepository.findOne({
 			relations: this.relations,
 			where: criteria
 		});
 	}
 
-	findAllBy(criteria: ColumnSearchCriteria) {
+	findAllBy(criteria: FindOptionsWhere<ColumnEntity>) {
 		return this.columnsRepository.find({
 			relations: this.relations,
 			where: criteria

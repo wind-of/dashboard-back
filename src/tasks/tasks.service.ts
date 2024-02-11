@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import { UpdateTaskDto } from "src/tasks/dto/update-task.dto";
 import { Tasks as TaskEntity } from "src/entities/tasks.entity";
 import { CreateTaskDto } from "src/tasks/dto/create-task.dto";
-import { TaskSearchCriteria } from "src/tasks/types/task-criteria";
 import { TagsService } from "src/tags/tags.service";
 import { TaskRelations } from "src/tasks/types/task.relations";
 import { RANK_START_POSITION, getNextRank } from "src/helpers/lexorank";
@@ -85,7 +84,7 @@ export class TaskService {
 		await this.tasksRepository.delete(id);
 	}
 
-	async findBy(criteria: TaskSearchCriteria) {
+	async findBy(criteria: FindOptionsWhere<TaskEntity>) {
 		return this.tasksRepository.findOne({
 			where: criteria,
 			relations: this.relations,
@@ -93,7 +92,7 @@ export class TaskService {
 		});
 	}
 
-	async findAllBy(criteria: TaskSearchCriteria) {
+	async findAllBy(criteria: FindOptionsWhere<TaskEntity>) {
 		return this.tasksRepository.find({
 			where: criteria,
 			relations: this.relations,

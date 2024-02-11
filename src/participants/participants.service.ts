@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Repository } from "typeorm";
 import { Participants as ParticipantsEntity } from "src/entities/participants.entity";
-import { ParticipantSearchCriteria } from "src/participants/types/participant-criteria";
 import { ParticipantCreationData } from "src/participants/types/participant-creation";
 import { ParticipantUpdateData } from "src/participants/types/participant-update";
 import { ParticipantDeletionData } from "src/participants/types/participant-delete";
@@ -55,7 +54,7 @@ export class ParticipantsService {
 		await this.participantsRepository.delete(participant);
 	}
 
-	findBy(criteria: ParticipantSearchCriteria) {
+	findBy(criteria: FindOptionsWhere<ParticipantsEntity>) {
 		return this.participantsRepository.findOneBy(criteria);
 	}
 
