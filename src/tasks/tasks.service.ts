@@ -40,8 +40,10 @@ export class TaskService {
 		taskId: number,
 		newColumnId: number,
 		position: number,
-		oldPosition: number
+		shouldInsertAfter: boolean
 	) {
+		const currentTask = await this.findBy({ id: taskId });
+		const isSameColumn = currentTask.columnId === newColumnId;
 		const tasks = await this.tasksRepository.find({
 			where: { columnId: newColumnId },
 			order: { lexorank: "ASC" },
@@ -52,40 +54,35 @@ export class TaskService {
 			tasks[position],
 			tasks[position + 1]
 		];
-		console.log(previousTask, replacingTask, nextTask);
-		console.log(taskId, newColumnId, position, oldPosition);
-		if (!replacingTask) {
-			await this.tasksRepository.update(taskId, {
-				lexorank: RANK_START_POSITION,
-				columnId: newColumnId
-			});
-			return;
-		}
-		if (!previousTask) {
-			console.log("Предыдущего нет!");
-			const currentTaskLexorank = replacingTask.lexorank;
-			const replacingTaskLexorank = getRankBetween(
-				currentTaskLexorank,
-				nextTask?.lexorank || RANK_END_POSITION
-			);
-			await this.tasksRepository.update(taskId, {
-				lexorank: currentTaskLexorank,
-				columnId: newColumnId
-			});
+		const currentTaskLexorank = !replacingTask
+			? !previousTask
+				? RANK_START_POSITION
+				: previousTask.lexorank + "z"
+			: !previousTask
+			? replacingTask.lexorank
+			: nextTask
+			? nextTask.id === Number(taskId) || (!isSameColumn && !shouldInsertAfter)
+				? getRankBetween(previousTask.lexorank, replacingTask.lexorank)
+				: getRankBetween(replacingTask.lexorank, nextTask.lexorank)
+			: shouldInsertAfter && isSameColumn
+			? replacingTask.lexorank + "z"
+			: getRankBetween(previousTask.lexorank, replacingTask.lexorank);
+		const replacingTaskLexorank =
+			replacingTask && !previousTask
+				? getRankBetween(
+						currentTaskLexorank,
+						nextTask?.lexorank || currentTaskLexorank + "z"
+				  )
+				: undefined;
+		await this.tasksRepository.update(taskId, {
+			lexorank: currentTaskLexorank,
+			columnId: newColumnId
+		});
+		if (replacingTaskLexorank) {
 			await this.tasksRepository.update(replacingTask.id, {
 				lexorank: replacingTaskLexorank
 			});
-			return;
 		}
-		// Нужно учитывать, если переставляют сверху вниз или снизу вверх.
-		const [previous, next] =
-			oldPosition < position
-				? [replacingTask.lexorank, nextTask?.lexorank || RANK_END_POSITION]
-				: [previousTask.lexorank, replacingTask.lexorank];
-		await this.tasksRepository.update(taskId, {
-			lexorank: getRankBetween(previous, next),
-			columnId: newColumnId
-		});
 	}
 
 	async update(taskId: number, task: UpdateTaskDto) {

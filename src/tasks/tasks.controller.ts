@@ -50,7 +50,7 @@ export class TaskController {
 			taskId,
 			updateTaskPositionDto.columnId,
 			updateTaskPositionDto.position,
-			updateTaskPositionDto.oldPosition
+			updateTaskPositionDto.shouldInsertAfter
 		);
 	}
 
