@@ -8,7 +8,7 @@ import { TaskSearchCriteria } from "src/tasks/types/task-criteria";
 import { TagsService } from "src/tags/tags.service";
 import { TaskRelations } from "src/tasks/types/task.relations";
 import { RANK_START_POSITION, getNextRank } from "src/helpers/lexorank";
-import { computeLexoranks } from "src/tasks/helpers";
+import { computeLexoranks } from "src/helpers/lexorank";
 
 @Injectable()
 export class TaskService {
@@ -49,19 +49,22 @@ export class TaskService {
 			tasks[position],
 			tasks[position + 1]
 		];
-		const { currentTaskLexorank, replacingTaskLexorank } = computeLexoranks(
-			currentTask,
+		const {
+			currentElementLexorank: currentLexorank,
+			replacingElementLexorank: replacingLexorank
+		} = computeLexoranks(
 			nearbyTasks,
-			newColumnId,
+			currentTask.id === Number(tasks[position + 1]?.id),
+			newColumnId === currentTask.columnId,
 			shouldInsertAfter
 		);
 		await this.tasksRepository.update(taskId, {
-			lexorank: currentTaskLexorank,
+			lexorank: currentLexorank,
 			columnId: newColumnId
 		});
-		if (replacingTaskLexorank) {
+		if (replacingLexorank) {
 			await this.tasksRepository.update(tasks[position].id, {
-				lexorank: replacingTaskLexorank
+				lexorank: replacingLexorank
 			});
 		}
 	}
