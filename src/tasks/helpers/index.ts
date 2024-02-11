@@ -15,26 +15,63 @@ export function computeLexoranks(
 	const isSameColumn = currentTask.columnId === targetColumnId;
 	const [previousTask, replacingTask, nextTask] = nearbyTasks;
 
-	const currentTaskLexorank = !replacingTask
-		? !previousTask
-			? RANK_START_POSITION
-			: getNextRank(previousTask.lexorank)
-		: !previousTask
-		? replacingTask.lexorank
-		: nextTask
-		? nextTask.id === Number(currentTaskId) ||
-		  (!isSameColumn && !shouldInsertAfter)
-			? getRankBetween(previousTask.lexorank, replacingTask.lexorank)
-			: getRankBetween(replacingTask.lexorank, nextTask.lexorank)
-		: shouldInsertAfter && isSameColumn
-		? getNextRank(replacingTask.lexorank)
-		: getRankBetween(previousTask.lexorank, replacingTask.lexorank);
-	const replacingTaskLexorank =
-		replacingTask && !previousTask
-			? getRankBetween(
-					currentTaskLexorank,
-					nextTask?.lexorank || getNextRank(currentTaskLexorank)
-			  )
-			: undefined;
+	let currentTaskLexorank;
+	let replacingTaskLexorank;
+
+	if (!replacingTask) {
+		// Если элемент не занимает ни чьё место, nо есть два возможных случая:
+		if (!previousTask) {
+			// Когда в группе нет элементов, и мы вставляем первый
+			currentTaskLexorank = RANK_START_POSITION;
+		} else {
+			// Когда в группе есть один единственный элемент, и мы вставляем после него
+			currentTaskLexorank = getNextRank(previousTask.lexorank);
+		}
+	} else if (!previousTask) {
+		// Если же элемент занимает место другого элемента, то это либо начало списка:
+		currentTaskLexorank = replacingTask.lexorank;
+	} else if (nextTask) {
+		// Либо же это середина списка:
+		if (
+			nextTask.id === Number(currentTaskId) ||
+			(!isSameColumn && !shouldInsertAfter)
+		) {
+			// Тогда, если перетаскиваемый элемент идёт после элемента, на позицию которого мы его перекладываем.
+			// Или же если перетаскиваемый элемент не в другой колонке и не вставляем после элемента.
+			currentTaskLexorank = getRankBetween(
+				previousTask.lexorank,
+				replacingTask.lexorank
+			);
+		} else {
+			// Иначе, если перетаскиваемый элемент в другой колонке или вставляем после элемента
+			currentTaskLexorank = getRankBetween(
+				replacingTask.lexorank,
+				nextTask.lexorank
+			);
+		}
+	} else {
+		// Либо же это конец списка.
+		// Почему здесь именно следующее разделение? - Особенность библиотеки на фронте
+		if (shouldInsertAfter && isSameColumn) {
+			// Когда вставляем после последнего в той же колонке
+			currentTaskLexorank = getNextRank(replacingTask.lexorank);
+		} else {
+			// В остальных случаях.
+			currentTaskLexorank = getRankBetween(
+				previousTask.lexorank,
+				replacingTask.lexorank
+			);
+		}
+	}
+
+	if (replacingTask && !previousTask) {
+		replacingTaskLexorank = getRankBetween(
+			currentTaskLexorank,
+			nextTask?.lexorank || getNextRank(currentTaskLexorank)
+		);
+	} else {
+		replacingTaskLexorank = undefined;
+	}
+
 	return { currentTaskLexorank, replacingTaskLexorank };
 }
