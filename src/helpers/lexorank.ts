@@ -128,6 +128,3 @@ export function getRankBetween(firstRank, secondRank) {
 export function getNextRank(previousRank) {
 	return previousRank + "z";
 }
-export function getAheadRank() {
-	return "a";
-}

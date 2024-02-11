@@ -6,13 +6,9 @@ import { Tasks as TaskEntity } from "src/entities/tasks.entity";
 import { CreateTaskDto } from "src/tasks/dto/create-task.dto";
 import { TaskSearchCriteria } from "src/tasks/types/task-criteria";
 import { TagsService } from "src/tags/tags.service";
-import { TaskRelations } from "./types/task.relations";
-import {
-	RANK_END_POSITION,
-	RANK_START_POSITION,
-	getNextRank,
-	getRankBetween
-} from "src/helpers/lexorank";
+import { TaskRelations } from "src/tasks/types/task.relations";
+import { RANK_START_POSITION, getNextRank } from "src/helpers/lexorank";
+import { computeLexoranks } from "src/tasks/helpers";
 
 @Injectable()
 export class TaskService {
@@ -43,43 +39,28 @@ export class TaskService {
 		shouldInsertAfter: boolean
 	) {
 		const currentTask = await this.findBy({ id: taskId });
-		const isSameColumn = currentTask.columnId === newColumnId;
 		const tasks = await this.tasksRepository.find({
 			where: { columnId: newColumnId },
 			order: { lexorank: "ASC" },
 			take: position + 2
 		});
-		const [previousTask, replacingTask, nextTask] = [
+		const nearbyTasks = [
 			tasks[position - 1],
 			tasks[position],
 			tasks[position + 1]
 		];
-		const currentTaskLexorank = !replacingTask
-			? !previousTask
-				? RANK_START_POSITION
-				: previousTask.lexorank + "z"
-			: !previousTask
-			? replacingTask.lexorank
-			: nextTask
-			? nextTask.id === Number(taskId) || (!isSameColumn && !shouldInsertAfter)
-				? getRankBetween(previousTask.lexorank, replacingTask.lexorank)
-				: getRankBetween(replacingTask.lexorank, nextTask.lexorank)
-			: shouldInsertAfter && isSameColumn
-			? replacingTask.lexorank + "z"
-			: getRankBetween(previousTask.lexorank, replacingTask.lexorank);
-		const replacingTaskLexorank =
-			replacingTask && !previousTask
-				? getRankBetween(
-						currentTaskLexorank,
-						nextTask?.lexorank || currentTaskLexorank + "z"
-				  )
-				: undefined;
+		const { currentTaskLexorank, replacingTaskLexorank } = computeLexoranks(
+			currentTask,
+			nearbyTasks,
+			newColumnId,
+			shouldInsertAfter
+		);
 		await this.tasksRepository.update(taskId, {
 			lexorank: currentTaskLexorank,
 			columnId: newColumnId
 		});
 		if (replacingTaskLexorank) {
-			await this.tasksRepository.update(replacingTask.id, {
+			await this.tasksRepository.update(tasks[position].id, {
 				lexorank: replacingTaskLexorank
 			});
 		}
