@@ -22,13 +22,13 @@ export class TaskService {
 		tags: true
 	};
 
-	async create(task: CreateTaskDto) {
+	async create(task: CreateTaskDto, creatorId: number) {
 		const [last] = await this.tasksRepository.find({
 			order: { lexorank: "DESC" },
 			take: 1
 		});
 		const lexorank = last ? getNextRank(last.lexorank) : RANK_START_POSITION;
-		return this.tasksRepository.save({ ...task, lexorank });
+		return this.tasksRepository.save({ ...task, lexorank, creatorId });
 	}
 
 	async updateTaskPosition(

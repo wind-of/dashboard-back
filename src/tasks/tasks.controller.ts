@@ -5,7 +5,8 @@ import {
 	Param,
 	Post,
 	UseGuards,
-	Patch
+	Patch,
+	Request
 } from "@nestjs/common";
 import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { ProjectParticipantRoles as Roles } from "src/decorators/project-roles.decorator";
@@ -25,8 +26,8 @@ export class TaskController {
 
 	@Post()
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
-	async createTask(@Body() task: CreateTaskDto) {
-		return this.taskService.create(task);
+	async createTask(@Body() task: CreateTaskDto, @Request() request) {
+		return this.taskService.create(task, request.user.id);
 	}
 
 	@UseGuards(TaskExistenceGuard)
