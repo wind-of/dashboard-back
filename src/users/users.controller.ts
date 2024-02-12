@@ -59,15 +59,6 @@ export class UsersController {
 	}
 
 	@UseGuards(AuthenticatedGuard, ProfileOwnerGuard)
-	@Patch(":userId/password")
-	async updateUserPassword(
-		@Param("userId") id: number,
-		@Body() updateUserPasswordDto: UpdateUserPasswordDto
-	) {
-		return this.usersService.updatePassword(id, updateUserPasswordDto);
-	}
-
-	@UseGuards(AuthenticatedGuard, ProfileOwnerGuard)
 	@Patch(":userId")
 	async updateUser(
 		@Param("userId") id: number,
@@ -77,17 +68,17 @@ export class UsersController {
 	}
 
 	@UseGuards(AuthenticatedGuard, ProfileOwnerGuard)
-	@Patch(":userId/password")
-	async updatePassword(
-		@Param("userId") id: number,
-		@Body("password") password: string
-	) {
-		return this.usersService.updatePassword(id, password);
-	}
-
-	@UseGuards(AuthenticatedGuard, ProfileOwnerGuard)
 	@Delete(":userId")
 	async deleteUser(@Param("userId") id: number) {
 		return this.usersService.remove(id);
+	}
+
+	@UseGuards(AuthenticatedGuard, ProfileOwnerGuard)
+	@Patch("password/:userId")
+	async updateUserPassword(
+		@Param("userId") id: number,
+		@Body() updateUserPasswordDto: UpdateUserPasswordDto
+	) {
+		return this.usersService.updatePassword(id, updateUserPasswordDto);
 	}
 }
