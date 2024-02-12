@@ -1,62 +1,6 @@
-const ALPHABET_SIZE = 26;
-export const RANK_START_POSITION = "aaaaa";
-export const RANK_END_POSITION = "zzzzz";
-const TASK_FOR_PROJECT_LIMIT_TOTAL = 10;
-
-export function getDefaultRank(forNumOfTasks = TASK_FOR_PROJECT_LIMIT_TOTAL) {
-	const startPos = RANK_START_POSITION;
-	const endPos = RANK_END_POSITION;
-
-	const startCode = startPos.charCodeAt(0);
-	const endCode = endPos.charCodeAt(0);
-
-	const diffInOneSymb = endCode - startCode;
-
-	const totalDiff =
-		diffInOneSymb +
-		diffInOneSymb * ALPHABET_SIZE +
-		diffInOneSymb * ALPHABET_SIZE * ALPHABET_SIZE;
-	const diffForOneItem = Math.floor(totalDiff / (forNumOfTasks + 1));
-
-	const diffForSymbols = [
-		diffForOneItem % ALPHABET_SIZE,
-		Math.floor(diffForOneItem / ALPHABET_SIZE) % ALPHABET_SIZE,
-		Math.floor(diffForOneItem / ALPHABET_SIZE ** 2) % ALPHABET_SIZE
-	];
-
-	const positions = [];
-	let lastAddedElement = startPos;
-	for (let ind = 0; ind < forNumOfTasks; ind++) {
-		let offset = 0;
-		let newElement = "";
-		for (let index = 0; index < 3; index++) {
-			const diffInSymbols = diffForSymbols[index];
-
-			let newElementCode =
-				lastAddedElement.charCodeAt(2 - index) + diffInSymbols;
-			if (offset !== 0) {
-				newElementCode += 1;
-				offset = 0;
-			}
-
-			if (newElementCode > "z".charCodeAt(0)) {
-				offset += 1;
-				newElementCode -= ALPHABET_SIZE;
-			}
-
-			const symbol = String.fromCharCode(newElementCode);
-			newElement += symbol;
-		}
-
-		newElement = newElement.split("").reverse().join("");
-		positions.push(newElement);
-		lastAddedElement = newElement;
-	}
-
-	positions.sort();
-	positions.forEach((p) => console.log(p));
-	return positions;
-}
+export const ALPHABET_SIZE = 26 as const; // for now
+export const RANK_START_POSITION = "aaaaa" as const;
+export const RANK_END_POSITION = "zzzzz" as const;
 
 export function getRankBetween(firstRank, secondRank) {
 	if (firstRank.localeCompare(secondRank) >= 0) {
@@ -86,24 +30,26 @@ export function getRankBetween(firstRank, secondRank) {
 		let secondCode = secondPositionCodes[index];
 
 		if (secondCode < firstCode) {
-			secondCode += 26; // ALPHABET_SIZE = 26 for now
+			secondCode += ALPHABET_SIZE;
 			secondPositionCodes[index - 1] -= 1;
 		}
 
-		const powRes = Math.pow(26, firstRank.length - index - 1);
+		const powRes = Math.pow(ALPHABET_SIZE, firstRank.length - index - 1);
 		difference += (secondCode - firstCode) * powRes;
 	}
 
 	let newElement = "";
 	if (difference <= 1) {
 		newElement =
-			firstRank + String.fromCharCode("a".charCodeAt(0) + Math.floor(26 / 2));
+			firstRank +
+			String.fromCharCode("a".charCodeAt(0) + Math.floor(ALPHABET_SIZE / 2));
 	} else {
 		difference = Math.floor(difference / 2);
 
 		let offset = 0;
 		for (let index = 0; index < firstRank.length; index++) {
-			const diffInSymbols = Math.floor(difference / Math.pow(26, index)) % 26;
+			const diffInSymbols =
+				Math.floor(difference / Math.pow(ALPHABET_SIZE, index)) % ALPHABET_SIZE;
 
 			let newElementCode =
 				firstRank.charCodeAt(secondRank.length - index - 1) +
@@ -113,7 +59,7 @@ export function getRankBetween(firstRank, secondRank) {
 
 			if (newElementCode > "z".charCodeAt(0)) {
 				offset++;
-				newElementCode -= 26; // ALPHABET_SIZE = 26 for now
+				newElementCode -= ALPHABET_SIZE; // ALPHABET_SIZE = ALPHABET_SIZE for now
 			}
 
 			newElement += String.fromCharCode(newElementCode);

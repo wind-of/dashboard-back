@@ -53,7 +53,6 @@ export class ColumnsService {
 			columns[position],
 			columns[position + 1]
 		];
-		console.log(columnId, newProjectId, position, shouldInsertAfter);
 		const {
 			currentElementLexorank: currentLexorank,
 			replacingElementLexorank: replacingLexorank
