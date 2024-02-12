@@ -6,6 +6,7 @@ export class UpdateTaskDto {
 	readonly start?: Date;
 	readonly end?: Date;
 	readonly attachment?: string;
+	readonly performedId?: number;
 	readonly tags?: TagProto[];
 	readonly columnId?: number;
 	readonly projectId: number;
