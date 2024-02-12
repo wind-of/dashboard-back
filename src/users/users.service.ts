@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FindOptionsWhere, Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
@@ -7,6 +7,7 @@ import { Users as UserEntity } from "src/entities/users.entity";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";
 import { userWithourPassword } from "src/users/helpers";
+import { UpdateUserPasswordDto } from "./dto/update-user-password.dto";
 
 @Injectable()
 export class UsersService {
@@ -32,9 +33,19 @@ export class UsersService {
 		return userWithourPassword(updatedUser);
 	}
 
-	async updatePassword(id: number, password: string) {
+	async updatePassword(
+		id: number,
+		{ newPassword, oldPassword }: UpdateUserPasswordDto
+	) {
+		const user = await this.usersRepository.findOneBy({ id });
+		if (user.password !== bcrypt.hashSync(oldPassword, BCRYPT_ROUNDS)) {
+			throw new BadRequestException("A problem.", {
+				cause: new Error(),
+				description: "Entered password is incorrect"
+			});
+		}
 		await this.usersRepository.update(id, {
-			password: bcrypt.hashSync(password, BCRYPT_ROUNDS)
+			password: bcrypt.hashSync(newPassword, BCRYPT_ROUNDS)
 		});
 		const updatedUser = await this.usersRepository.findOneBy({
 			id

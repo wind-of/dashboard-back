@@ -18,6 +18,7 @@ import { UpdateUserDto } from "src/users/dto/update-user.dto";
 import { ProfileOwnerGuard } from "src/users/guards/profile-owner.guard";
 import { userWithourPassword, userWithourPrivate } from "src/users/helpers";
 import { Raw } from "typeorm";
+import { UpdateUserPasswordDto } from "src/users/dto/update-user-password.dto";
 
 @Controller("users")
 export class UsersController {
@@ -55,6 +56,15 @@ export class UsersController {
 	@Post()
 	async createUser(@Body() createUserDto: CreateUserDto) {
 		return this.usersService.create(createUserDto);
+	}
+
+	@UseGuards(AuthenticatedGuard, ProfileOwnerGuard)
+	@Patch(":userId/password")
+	async updateUserPassword(
+		@Param("userId") id: number,
+		@Body() updateUserPasswordDto: UpdateUserPasswordDto
+	) {
+		return this.usersService.updatePassword(id, updateUserPasswordDto);
 	}
 
 	@UseGuards(AuthenticatedGuard, ProfileOwnerGuard)
