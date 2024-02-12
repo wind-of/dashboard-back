@@ -36,6 +36,9 @@ export class Tasks {
 	columnId: number;
 
 	@Column()
+	creatorId: number;
+
+	@Column()
 	lexorank: string;
 
 	@ManyToOne(() => ColumnEntity, (column) => column.tasks, {
