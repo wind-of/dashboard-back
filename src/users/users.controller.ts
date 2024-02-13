@@ -32,7 +32,7 @@ export class UsersController {
 	}
 
 	@UseGuards(AuthenticatedGuard)
-	@Get("project")
+	@Get("list")
 	async getUsersByProjectId(@Query() query) {
 		const ids = query.userIds.split(",").map(Number);
 		const users = await this.usersService.findAllBy({

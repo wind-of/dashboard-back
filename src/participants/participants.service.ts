@@ -58,6 +58,10 @@ export class ParticipantsService {
 		return this.participantsRepository.findOneBy(criteria);
 	}
 
+	findAllBy(criteria: FindOptionsWhere<ParticipantsEntity>) {
+		return this.participantsRepository.findBy(criteria);
+	}
+
 	async isOwner(participantId: number, projectId: number) {
 		const participant = await this.findBy({ userId: participantId, projectId });
 		return participant.role === ParticipantRolesEnum.Owner;
