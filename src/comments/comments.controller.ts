@@ -29,6 +29,7 @@ export class CommentsController {
 		const comment = await this.commentsService.create({
 			attachment: createCommentDto.attachment,
 			content: createCommentDto.content,
+			taskId: createCommentDto.taskId,
 			userId: req.user.id
 		});
 		return comment;
