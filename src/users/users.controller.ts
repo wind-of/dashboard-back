@@ -9,14 +9,15 @@ import {
 	Patch,
 	Delete,
 	Query,
-	Req
+	Req,
+	BadRequestException
 } from "@nestjs/common";
 import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { UsersService } from "src/users/users.service";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";
 import { ProfileOwnerGuard } from "src/users/guards/profile-owner.guard";
-import { userWithourPassword, userWithourPrivate } from "src/users/helpers";
+import { userWithoutPassword, userWithourPrivate } from "src/users/helpers";
 import { Raw } from "typeorm";
 import { UpdateUserPasswordDto } from "src/users/dto/update-user-password.dto";
 
@@ -37,7 +38,7 @@ export class UsersController {
 		const users = await this.usersService.findAllBy({
 			id: Raw((alias) => `${alias} IN (${ids})`)
 		});
-		return users.map((user) => userWithourPassword(user));
+		return users.map((user) => userWithoutPassword(user));
 	}
 
 	@UseGuards(AuthenticatedGuard)
@@ -50,7 +51,12 @@ export class UsersController {
 	@Get(":userId")
 	async getUser(@Param("userId") id: number, @Request() req) {
 		const user = await this.usersService.findBy({ id });
-		return user.id === req.user.id ? user : userWithourPrivate(user);
+		if (!user) {
+			throw new BadRequestException("User not found");
+		}
+		return user.id === req.user.id
+			? userWithoutPassword(user)
+			: userWithourPrivate(user);
 	}
 
 	@Post()

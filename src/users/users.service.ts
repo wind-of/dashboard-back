@@ -6,7 +6,7 @@ import { BCRYPT_ROUNDS } from "src/constants";
 import { Users as UserEntity } from "src/entities/users.entity";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";
-import { userWithourPassword } from "src/users/helpers";
+import { userWithoutPassword } from "src/users/helpers";
 import { UpdateUserPasswordDto } from "./dto/update-user-password.dto";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class UsersService {
 			...user,
 			password: bcrypt.hashSync(user.password, BCRYPT_ROUNDS)
 		});
-		return userWithourPassword(createdUser);
+		return userWithoutPassword(createdUser);
 	}
 
 	async update(id: number, user: UpdateUserDto) {
@@ -30,7 +30,7 @@ export class UsersService {
 		const updatedUser = await this.usersRepository.findOneBy({
 			id
 		});
-		return userWithourPassword(updatedUser);
+		return userWithoutPassword(updatedUser);
 	}
 
 	async updatePassword(
@@ -50,7 +50,7 @@ export class UsersService {
 		const updatedUser = await this.usersRepository.findOneBy({
 			id
 		});
-		return userWithourPassword(updatedUser);
+		return userWithoutPassword(updatedUser);
 	}
 
 	async remove(id: number): Promise<void> {
