@@ -46,7 +46,7 @@ export class ProjectController {
 			return [];
 		}
 		const projects = await this.projectService.findAllBy(
-			participatingProjects.map(({ id }) => ({ id })),
+			participatingProjects.map(({ projectId }) => ({ id: projectId })),
 			{ participants: true }
 		);
 		return projects;
