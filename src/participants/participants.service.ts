@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { FindOptionsWhere, Repository } from "typeorm";
 import { Participants as ParticipantsEntity } from "src/entities/participants.entity";
@@ -8,6 +8,7 @@ import { ParticipantDeletionData } from "src/participants/types/participant-dele
 import { ParticipantRolesEnum } from "src/participants/enums/roles.enum";
 import { isAllowedToUpdateRole } from "src/participants/helpers";
 import { Projects as ProjectsEntity } from "src/entities/projects.entity";
+import { Users as UsersEntity } from "src/entities/users.entity";
 
 @Injectable()
 export class ParticipantsService {
@@ -15,11 +16,34 @@ export class ParticipantsService {
 		@InjectRepository(ParticipantsEntity)
 		private participantsRepository: Repository<ParticipantsEntity>,
 		@InjectRepository(ProjectsEntity)
-		private projectsRepository: Repository<ProjectsEntity>
+		private projectsRepository: Repository<ProjectsEntity>,
+		@InjectRepository(UsersEntity)
+		private usersRepository: Repository<UsersEntity>
 	) {}
 
 	async create(participant: ParticipantCreationData) {
-		return this.participantsRepository.save(participant);
+		const user = await this.usersRepository.findOneBy({
+			email: participant.email,
+			id: participant.userId
+		});
+		if (!user) {
+			throw new BadRequestException(
+				`User with email ${participant.email} not found`
+			);
+		}
+		const participantExist = await this.participantsRepository.findOneBy({
+			userId: user.id,
+			projectId: participant.projectId
+		});
+		if (participantExist) {
+			throw new BadRequestException("Participant already exist");
+		}
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const { email, ...participantWithourEmail } = participant;
+		return this.participantsRepository.save({
+			...participantWithourEmail,
+			userId: user.id
+		});
 	}
 
 	async update({ userId, projectId, commiterId, role: updatedRole }) {
