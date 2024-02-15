@@ -99,4 +99,21 @@ export class TaskService {
 			order: { lexorank: "ASC" }
 		});
 	}
+
+	async findAllAssigned(userId: number) {
+		const tasks = await this.tasksRepository.find({
+			where: { performerId: userId },
+			relations: {
+				column: { project: true }
+			},
+			order: { lexorank: "ASC" }
+		});
+		return tasks.map((task) => ({
+			task,
+			project: {
+				id: task.column.project.id,
+				title: task.column.project.title
+			}
+		}));
+	}
 }

@@ -6,7 +6,8 @@ import {
 	Post,
 	UseGuards,
 	Patch,
-	Request
+	Req,
+	Get
 } from "@nestjs/common";
 import { AuthenticatedGuard } from "src/auth/guards/authentication.guard";
 import { ProjectParticipantRoles as Roles } from "src/decorators/project-roles.decorator";
@@ -24,9 +25,14 @@ import { UpdateTaskPositionDto } from "src/tasks/dto/update-task-position.dto";
 export class TaskController {
 	constructor(private taskService: TaskService) {}
 
+	@Get("assigned")
+	async getAssignedTasks(@Req() req) {
+		return this.taskService.findAllAssigned(req.user.id);
+	}
+
 	@Post()
 	@Roles(RolesEnum.Owner, RolesEnum.Admin, RolesEnum.Member)
-	async createTask(@Body() task: CreateTaskDto, @Request() request) {
+	async createTask(@Body() task: CreateTaskDto, @Req() request) {
 		return this.taskService.create(task, request.user.id);
 	}
 
