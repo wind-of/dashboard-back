@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { JwtModule } from "@nestjs/jwt";
 import { AppController } from "src/app.controller";
 import { AppService } from "src/app.service";
 import { AuthModule } from "src/auth/auth.module";
@@ -28,7 +27,6 @@ dotenv.config();
 		}),
 		AuthModule,
 		UsersModule,
-		JwtModule,
 		ProjectModule,
 		TaskModule,
 		CommentsModule,

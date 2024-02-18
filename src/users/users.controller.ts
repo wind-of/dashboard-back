@@ -28,7 +28,7 @@ export class UsersController {
 	@UseGuards(AuthenticatedGuard)
 	@Get("profile")
 	getProfile(@Request() req) {
-		return req.user;
+		return this.usersService.findBy({ id: req.user.id });
 	}
 
 	@UseGuards(AuthenticatedGuard)
@@ -44,7 +44,8 @@ export class UsersController {
 	@UseGuards(AuthenticatedGuard)
 	@Get("me")
 	async getMe(@Req() req) {
-		return req.user;
+		const user = await this.usersService.findBy({ email: req.user.email });
+		return userWithoutPassword(user);
 	}
 
 	@UseGuards(AuthenticatedGuard)
