@@ -7,7 +7,7 @@ import { Users as UserEntity } from "src/entities/users.entity";
 import { CreateUserDto } from "src/users/dto/create-user.dto";
 import { UpdateUserDto } from "src/users/dto/update-user.dto";
 import { userWithoutPassword } from "src/users/helpers";
-import { UpdateUserPasswordDto } from "./dto/update-user-password.dto";
+import { UpdateUserPasswordDto } from "src/users/dto/update-user-password.dto";
 
 @Injectable()
 export class UsersService {
@@ -26,7 +26,6 @@ export class UsersService {
 
 	async update(id: number, user: UpdateUserDto) {
 		await this.usersRepository.update(id, user);
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const updatedUser = await this.usersRepository.findOneBy({
 			id
 		});
